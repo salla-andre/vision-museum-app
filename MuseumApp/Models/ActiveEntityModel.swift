@@ -9,9 +9,12 @@ import Foundation
 import RealityKit
 
 enum ActiveEntityState {
+    // Repositioning
     case move
-    case show
-    case disabled
+    // Showing Buttons
+    case idle
+    // Presenting info view
+    case presenting
 }
 
 class ActiveEntityModel {

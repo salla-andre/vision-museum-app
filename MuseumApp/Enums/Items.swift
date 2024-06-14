@@ -7,10 +7,14 @@
 
 import Foundation
 
-enum Items: CaseIterable {
+enum Items: String, CaseIterable {
     case ballot
     case vase
     case bust
+    
+    var entityGroupName: String {
+        "\(self.rawValue.capitalized)Group"
+    }
     
     var title: String {
         switch self {

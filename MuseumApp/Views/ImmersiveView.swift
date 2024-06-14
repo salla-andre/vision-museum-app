@@ -16,52 +16,62 @@ struct ImmersiveView: View {
     var body: some View {
         RealityView { content, attachments in
             var attachmentDict: [Attachments : Entity] = [:]
-            for item in Attachments.allCases {
-                if let attachment = attachments.entity(for: item) {
-                    attachmentDict[item] = attachment
+            for attachment in Attachments.allCases {
+                if let entity = attachments.entity(for: attachment) {
+                    attachmentDict[attachment] = entity
                 }
             }
             for entity in await model.loadEntities(with: attachmentDict) {
                 content.add(entity)
             }
         } attachments: {
-            Attachment(id: Attachments.moveButtonStart) {
-                MoveButton {
+            Attachment(id: Attachments.infoButtonShow) {
+                ShowInfoButton {
                     Task {
-                        model.enterMoveState()
+                        model.show(attachment: .infoButtonShow)
                     }
                 }
             }
-            Attachment(id: Attachments.moveButtonStop) {
-                MoveStopButton {
+            Attachment(id: Attachments.infoButtonHide) {
+                HideInfoButton {
                     Task {
-                        model.leaveMoveState()
+                        model.hide(attachment: .infoButtonHide)
                     }
                 }
+            }
+            Attachment(id: Attachments.infoView(item: .ballot)) {
+                InfoView(model: .init(item: .ballot))
+            }
+            Attachment(id: Attachments.infoView(item: .bust)) {
+                InfoView(model: .init(item: .bust))
+            }
+            Attachment(id: Attachments.infoView(item: .vase)) {
+                InfoView(model: .init(item: .vase))
             }
         }
-        .gesture(DragGesture()
-            .targetedToAnyEntity()
-            .handActivationBehavior(.pinch)
-            .onChanged { value in
-                model.move(
-                    entity: value.entity,
-                    translate: value.convert(
-                        value.translation3D,
-                        from: .local,
-                        to: .scene
-                    )
+        .gesture(
+            LongPressGesture()
+                .targetedToAnyEntity()
+                .onEnded { value in
+                    model.startMove(entity: value.entity)
+                }
+                .sequenced(
+                    before: DragGesture()
+                        .targetedToAnyEntity()
+                        .onChanged { value in
+                            model.move(
+                                entity: value.entity,
+                                translate: value.convert(
+                                    value.translation3D,
+                                    from: .local,
+                                    to: .scene
+                                )
+                            )
+                        }
+                        .onEnded { _  in
+                            model.stop()
+                        }
                 )
-            }
-            .onEnded { _  in
-                model.stop()
-            }
-        )
-        .gesture(TapGesture()
-            .targetedToAnyEntity()
-            .onEnded { value in
-                model.activate(entity: value.entity)
-            }
         )
     }
     
@@ -76,7 +86,7 @@ struct ImmersiveView: View {
     }
 }
 
-#Preview(immersionStyle: .full) {
+#Preview(immersionStyle: .mixed) {
     ImmersiveView()
         .environment(MuseumViewModel())
 }

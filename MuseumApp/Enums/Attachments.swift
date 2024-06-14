@@ -7,7 +7,14 @@
 
 import Foundation
 
-enum Attachments: CaseIterable {
-    case moveButtonStart
-    case moveButtonStop
+enum Attachments: CaseIterable, Hashable {
+    case infoButtonShow
+    case infoButtonHide
+    case infoView(item: Items)
+    
+    static var allCases: [Attachments] =
+    [
+        .infoButtonShow,
+        .infoButtonHide,
+    ] + Items.allCases.map { .infoView(item: $0) }
 }

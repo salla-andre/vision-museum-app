@@ -11,6 +11,5 @@ extension ShapeStyle where Self == Color {
     static var infoBackground: Color { Color("BackgroundColor") }
     static var btnConfirm: Color { Color("ConfirmColor") }
     static var btnClose: Color { Color("CloseColor") }
-    static var btnMove: Color { Color("MoveColor") }
     static var infoText: Color { Color("TextColor") }
 }

@@ -18,7 +18,7 @@ def Xform "Root"
     )
     {
         reorder nameChildren = ["Cube", "Bust"]
-        float3 xformOp:translate = (1, 0, -1.5)
+        float3 xformOp:translate = (0.75, 0, -1.5)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         def "Bust" (
@@ -102,6 +102,12 @@ def Xform "Root"
                     float3 position = (0, 0.70075536, 0)
                 }
             }
+        }
+
+        def RealityKitComponent "ImageBasedLightReceiver"
+        {
+            rel iblEntity = </Root>
+            uniform token info:id = "RealityKit.ImageBasedLightReceiver"
         }
     }
 
@@ -196,7 +202,7 @@ def Xform "Root"
     )
     {
         reorder nameChildren = ["Cylinder", "Vase", "InputTarget", "Collider", "RigidBody", "Cylinder_1"]
-        float3 xformOp:translate = (0, 0, -1.5)
+        float3 xformOp:translate = (0, 0, -2.5)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         def Cylinder "Cylinder" (
@@ -348,13 +354,19 @@ def Xform "Root"
             {
             }
         }
+
+        def RealityKitComponent "ImageBasedLightReceiver"
+        {
+            rel iblEntity = </Root>
+            uniform token info:id = "RealityKit.ImageBasedLightReceiver"
+        }
     }
 
     def Xform "BallotGroup" (
         active = true
     )
     {
-        float3 xformOp:translate = (-1, 0, -1.5)
+        float3 xformOp:translate = (-0.75, 0, -1.5)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         def Cylinder "Cylinder" (
@@ -446,6 +458,27 @@ def Xform "Root"
             {
             }
         }
+
+        def RealityKitComponent "GroundingShadow"
+        {
+            bool enableIBLShadow = 1
+            bool enableMeshShadow = 1
+            uniform token info:id = "RealityKit.GroundingShadow"
+        }
+
+        def RealityKitComponent "ImageBasedLightReceiver"
+        {
+            rel iblEntity = </Root>
+            uniform token info:id = "RealityKit.ImageBasedLightReceiver"
+        }
+    }
+
+    def RealityKitComponent "ImageBasedLight"
+    {
+        asset ibl = @ImageBasedLighting.skybox/ImageBasedLight.exr@
+        uniform token info:id = "RealityKit.ImageBasedLight"
+        float intensityExponent = 0.25
+        bool isGlobalIBL = 0
     }
 }
 

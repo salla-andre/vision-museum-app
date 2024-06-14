@@ -9,7 +9,10 @@ import SwiftUI
 
 struct InfoView: View {
     
-    @State var model: InfoViewModel
+    static let maxWidht: CGFloat = 700
+    static let maxHeight: CGFloat = 600
+    
+    @State var model: InfoModel
 
     var body: some View {
         ScrollView {
@@ -30,10 +33,13 @@ struct InfoView: View {
         }
         .background(.infoBackground)
         .glassBackgroundEffect()
-        .frame(maxWidth: 700, maxHeight: 600)
+        .frame(
+            maxWidth: InfoView.maxWidht,
+            maxHeight: InfoView.maxHeight
+        )
     }
 }
 
 #Preview(windowStyle: .plain) {
-    InfoView(model: InfoViewModel(item: .ballot))
+    InfoView(model: InfoModel(item: .ballot))
 }
