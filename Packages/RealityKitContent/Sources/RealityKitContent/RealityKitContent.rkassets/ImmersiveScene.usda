@@ -12,7 +12,7 @@ reorder rootPrims = ["Root", "WoodPlank"]
 
 def Xform "Root"
 {
-    reorder nameChildren = ["VaseGroup", "Cube", "BustGroup"]
+    reorder nameChildren = ["VaseGroup", "BallotGroup", "BustGroup", "WoodPlank"]
     def Xform "BustGroup" (
         active = true
     )
@@ -69,6 +69,8 @@ def Xform "Root"
         {
             bool gravityEnabled = 0
             uniform token info:id = "RealityKit.RigidBody"
+            bool lockRotationY = 1
+            bool lockTranslationY = 1
             token motionType = "Kinematic"
 
             def RealityKitStruct "massFrame"
@@ -193,7 +195,7 @@ def Xform "Root"
         active = true
     )
     {
-        reorder nameChildren = ["Cylinder", "Vase", "vaso_placeholder", "Cylinder"]
+        reorder nameChildren = ["Cylinder", "Vase", "InputTarget", "Collider", "RigidBody", "Cylinder_1"]
         float3 xformOp:translate = (0, 0, -1.5)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
@@ -331,6 +333,106 @@ def Xform "Root"
         {
             bool gravityEnabled = 0
             uniform token info:id = "RealityKit.RigidBody"
+            bool lockRotationY = 1
+            bool lockTranslationY = 1
+            token motionType = "Kinematic"
+
+            def RealityKitStruct "massFrame"
+            {
+                def RealityKitStruct "m_pose"
+                {
+                }
+            }
+
+            def RealityKitStruct "material"
+            {
+            }
+        }
+    }
+
+    def Xform "BallotGroup" (
+        active = true
+    )
+    {
+        float3 xformOp:translate = (-1, 0, -1.5)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def Cylinder "Cylinder" (
+            active = true
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            reorder nameChildren = ["DefaultMaterial", "RigidBody", "Collider", "WoodPlank"]
+            uniform token axis = "Y"
+            double height = 0.8
+            rel material:binding = </Root/WoodPlank> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            double radius = 0.15
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (1, 1, 1)
+            float3 xformOp:translate = (0, 0.4, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+            def Material "DefaultMaterial"
+            {
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+                token outputs:surface.connect = </Root/BallotGroup/Cylinder/DefaultMaterial/DefaultSurfaceShader.outputs:surface>
+                float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (0, 109.5)
+                float2 ui:nodegraph:realitykit:subgraphOutputs:size = (181.5, 99)
+
+                def Shader "DefaultSurfaceShader"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    color3f inputs:diffuseColor = (1, 1, 1)
+                    float inputs:roughness = 0.75
+                    token outputs:surface
+                }
+            }
+        }
+
+        def "Ballot" (
+            active = true
+            references = @Ballot_box.usdz@
+        )
+        {
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (0.01, 0.01, 0.01)
+            float3 xformOp:translate = (0, 1.1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def RealityKitComponent "InputTarget"
+        {
+            uniform token info:id = "RealityKit.InputTarget"
+        }
+
+        def RealityKitComponent "Collider"
+        {
+            uint group = 1
+            uniform token info:id = "RealityKit.Collider"
+            uint mask = 4294967295
+            token type = "Default"
+
+            def RealityKitStruct "Shape"
+            {
+                float3 extent = (0.3, 1.4012045, 0.3)
+                token shapeType = "Box"
+
+                def RealityKitStruct "pose"
+                {
+                    float3 position = (0, 0.70060223, 0)
+                }
+            }
+        }
+
+        def RealityKitComponent "RigidBody"
+        {
+            bool gravityEnabled = 0
+            uniform token info:id = "RealityKit.RigidBody"
+            bool lockRotationY = 1
+            bool lockTranslationY = 1
             token motionType = "Kinematic"
 
             def RealityKitStruct "massFrame"

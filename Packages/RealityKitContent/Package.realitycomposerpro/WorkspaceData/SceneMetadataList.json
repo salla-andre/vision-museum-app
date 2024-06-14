@@ -39,27 +39,7 @@
     "objectMetadataList" : [
       [
         "25164C87-C9A8-476D-B867-A9F1E86AC00E",
-        "Root",
-        "immaculate_mother",
-        "Meshes"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "25164C87-C9A8-476D-B867-A9F1E86AC00E",
-        "Root",
-        "Nativity_Immaculate_Mother"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "25164C87-C9A8-476D-B867-A9F1E86AC00E",
-        "Root",
-        "immaculate_mother"
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -81,6 +61,25 @@
         "25164C87-C9A8-476D-B867-A9F1E86AC00E",
         "Root",
         "immaculate_mother",
+        "Meshes"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "25164C87-C9A8-476D-B867-A9F1E86AC00E",
+        "Root",
+        "immaculate_mother"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "25164C87-C9A8-476D-B867-A9F1E86AC00E",
+        "Root",
+        "immaculate_mother",
         "Meshes",
         "Sketchfab_model"
       ],
@@ -91,8 +90,7 @@
       [
         "25164C87-C9A8-476D-B867-A9F1E86AC00E",
         "Root",
-        "Nativity_Immaculate_Mother",
-        "Meshes"
+        "Nativity_Immaculate_Mother"
       ],
       {
         "isExpanded" : true,
@@ -100,7 +98,9 @@
       },
       [
         "25164C87-C9A8-476D-B867-A9F1E86AC00E",
-        "Root"
+        "Root",
+        "Nativity_Immaculate_Mother",
+        "Meshes"
       ],
       {
         "isExpanded" : true,
@@ -124,8 +124,7 @@
     "objectMetadataList" : [
       [
         "6845451C-601B-44FD-AD6F-0318CC1BE2C1",
-        "Root",
-        "Group"
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -143,7 +142,8 @@
       },
       [
         "6845451C-601B-44FD-AD6F-0318CC1BE2C1",
-        "Root"
+        "Root",
+        "Group"
       ],
       {
         "isExpanded" : true,
@@ -225,15 +225,7 @@
       [
         "DF52BC93-52A8-46C2-9287-F30E671F1FBA",
         "Root",
-        "BustGroup"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "DF52BC93-52A8-46C2-9287-F30E671F1FBA",
-        "Root"
+        "BallotGroup"
       ],
       {
         "isExpanded" : true,
@@ -243,6 +235,14 @@
         "DF52BC93-52A8-46C2-9287-F30E671F1FBA",
         "Root",
         "VaseGroup"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "DF52BC93-52A8-46C2-9287-F30E671F1FBA",
+        "Root"
       ],
       {
         "isExpanded" : true,
