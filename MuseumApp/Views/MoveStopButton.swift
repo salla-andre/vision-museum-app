@@ -21,7 +21,7 @@ struct MoveStopButton: View {
                 .padding(25)
                 .frame(width: 100, height: 100)
         }
-        .tint(Color("ConfirmColor"))
+        .tint(.btnConfirm)
         .foregroundStyle(.white)
         .glassBackgroundEffect()
     }

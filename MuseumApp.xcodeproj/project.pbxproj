@@ -10,9 +10,15 @@
 		12269E372C19C5160062AE7D /* MuseumViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E362C19C5160062AE7D /* MuseumViewModel.swift */; };
 		12269E422C1A58DB0062AE7D /* sunlight.skybox in Resources */ = {isa = PBXBuildFile; fileRef = 12269E412C1A58DB0062AE7D /* sunlight.skybox */; };
 		12269E4B2C1B8E3C0062AE7D /* MoveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E4A2C1B8E3C0062AE7D /* MoveButton.swift */; };
-		12269E4D2C1BAC700062AE7D /* AttachmentsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E4C2C1BAC700062AE7D /* AttachmentsEnum.swift */; };
+		12269E4D2C1BAC700062AE7D /* Attachments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E4C2C1BAC700062AE7D /* Attachments.swift */; };
 		12269E4F2C1BBA630062AE7D /* ActiveEntityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */; };
 		12269E532C1C27EF0062AE7D /* MoveStopButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E522C1C27EF0062AE7D /* MoveStopButton.swift */; };
+		12269E552C1C87DB0062AE7D /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E542C1C87DB0062AE7D /* Items.swift */; };
+		12269E572C1C94EB0062AE7D /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E562C1C94EB0062AE7D /* InfoView.swift */; };
+		12269E592C1C958C0062AE7D /* InfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E582C1C958C0062AE7D /* InfoViewModel.swift */; };
+		12269E5B2C1C99C00062AE7D /* ShowInfoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E5A2C1C99C00062AE7D /* ShowInfoButton.swift */; };
+		12E973CB2C1CA9DE003D9D83 /* HideInfoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E973CA2C1CA9DE003D9D83 /* HideInfoButton.swift */; };
+		12E973CF2C1CAAC7003D9D83 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E973CE2C1CAAC7003D9D83 /* Colors.swift */; };
 		12F0AAF62C17919E00F95DB5 /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = 12F0AAF52C17919E00F95DB5 /* RealityKitContent */; };
 		12F0AAF82C17919E00F95DB5 /* MuseumApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F0AAF72C17919E00F95DB5 /* MuseumApp.swift */; };
 		12F0AAFA2C17919E00F95DB5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F0AAF92C17919E00F95DB5 /* ContentView.swift */; };
@@ -25,9 +31,15 @@
 		12269E362C19C5160062AE7D /* MuseumViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseumViewModel.swift; sourceTree = "<group>"; };
 		12269E412C1A58DB0062AE7D /* sunlight.skybox */ = {isa = PBXFileReference; lastKnownFileType = file.skybox; path = sunlight.skybox; sourceTree = "<group>"; };
 		12269E4A2C1B8E3C0062AE7D /* MoveButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveButton.swift; sourceTree = "<group>"; };
-		12269E4C2C1BAC700062AE7D /* AttachmentsEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsEnum.swift; sourceTree = "<group>"; };
+		12269E4C2C1BAC700062AE7D /* Attachments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachments.swift; sourceTree = "<group>"; };
 		12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveEntityModel.swift; sourceTree = "<group>"; };
 		12269E522C1C27EF0062AE7D /* MoveStopButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveStopButton.swift; sourceTree = "<group>"; };
+		12269E542C1C87DB0062AE7D /* Items.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Items.swift; sourceTree = "<group>"; };
+		12269E562C1C94EB0062AE7D /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		12269E582C1C958C0062AE7D /* InfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewModel.swift; sourceTree = "<group>"; };
+		12269E5A2C1C99C00062AE7D /* ShowInfoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowInfoButton.swift; sourceTree = "<group>"; };
+		12E973CA2C1CA9DE003D9D83 /* HideInfoButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HideInfoButton.swift; sourceTree = "<group>"; };
+		12E973CE2C1CAAC7003D9D83 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		12F0AAF02C17919E00F95DB5 /* MuseumApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuseumApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F0AAF42C17919E00F95DB5 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
 		12F0AAF72C17919E00F95DB5 /* MuseumApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseumApp.swift; sourceTree = "<group>"; };
@@ -53,7 +65,7 @@
 		12269E382C1A55D20062AE7D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				12269E4C2C1BAC700062AE7D /* AttachmentsEnum.swift */,
+				12E973CE2C1CAAC7003D9D83 /* Colors.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -61,10 +73,35 @@
 		12269E492C1B8DE90062AE7D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				12F0AAF72C17919E00F95DB5 /* MuseumApp.swift */,
+				12F0AAF92C17919E00F95DB5 /* ContentView.swift */,
+				12F0AAFB2C17919E00F95DB5 /* ImmersiveView.swift */,
 				12269E4A2C1B8E3C0062AE7D /* MoveButton.swift */,
 				12269E522C1C27EF0062AE7D /* MoveStopButton.swift */,
+				12269E562C1C94EB0062AE7D /* InfoView.swift */,
+				12269E5A2C1C99C00062AE7D /* ShowInfoButton.swift */,
+				12E973CA2C1CA9DE003D9D83 /* HideInfoButton.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		12E973CC2C1CAA7D003D9D83 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				12269E582C1C958C0062AE7D /* InfoViewModel.swift */,
+				12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */,
+				12269E362C19C5160062AE7D /* MuseumViewModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		12E973CD2C1CAA8F003D9D83 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				12269E4C2C1BAC700062AE7D /* Attachments.swift */,
+				12269E542C1C87DB0062AE7D /* Items.swift */,
+			);
+			path = Enums;
 			sourceTree = "<group>";
 		};
 		12F0AAE72C17919E00F95DB5 = {
@@ -87,13 +124,10 @@
 		12F0AAF22C17919E00F95DB5 /* MuseumApp */ = {
 			isa = PBXGroup;
 			children = (
+				12E973CD2C1CAA8F003D9D83 /* Enums */,
+				12E973CC2C1CAA7D003D9D83 /* Models */,
 				12269E492C1B8DE90062AE7D /* Views */,
-				12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */,
 				12269E382C1A55D20062AE7D /* Extensions */,
-				12F0AAF72C17919E00F95DB5 /* MuseumApp.swift */,
-				12F0AAF92C17919E00F95DB5 /* ContentView.swift */,
-				12269E362C19C5160062AE7D /* MuseumViewModel.swift */,
-				12F0AAFB2C17919E00F95DB5 /* ImmersiveView.swift */,
 				12269E412C1A58DB0062AE7D /* sunlight.skybox */,
 				12F0AAFF2C17919F00F95DB5 /* Assets.xcassets */,
 				12F0AB042C17919F00F95DB5 /* Info.plist */,
@@ -194,12 +228,18 @@
 			files = (
 				12269E532C1C27EF0062AE7D /* MoveStopButton.swift in Sources */,
 				12269E4B2C1B8E3C0062AE7D /* MoveButton.swift in Sources */,
-				12269E4D2C1BAC700062AE7D /* AttachmentsEnum.swift in Sources */,
+				12269E4D2C1BAC700062AE7D /* Attachments.swift in Sources */,
+				12E973CF2C1CAAC7003D9D83 /* Colors.swift in Sources */,
 				12269E372C19C5160062AE7D /* MuseumViewModel.swift in Sources */,
+				12269E552C1C87DB0062AE7D /* Items.swift in Sources */,
 				12F0AAFA2C17919E00F95DB5 /* ContentView.swift in Sources */,
+				12269E5B2C1C99C00062AE7D /* ShowInfoButton.swift in Sources */,
 				12269E4F2C1BBA630062AE7D /* ActiveEntityModel.swift in Sources */,
 				12F0AAF82C17919E00F95DB5 /* MuseumApp.swift in Sources */,
+				12269E572C1C94EB0062AE7D /* InfoView.swift in Sources */,
+				12E973CB2C1CA9DE003D9D83 /* HideInfoButton.swift in Sources */,
 				12F0AAFC2C17919E00F95DB5 /* ImmersiveView.swift in Sources */,
+				12269E592C1C958C0062AE7D /* InfoViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,13 +1,13 @@
 //
-//  MoveButton.swift
+//  ShowInfoButton.swift
 //  MuseumApp
 //
-//  Created by André Salla on 13/06/24.
+//  Created by André Salla on 14/06/24.
 //
 
 import SwiftUI
 
-struct MoveButton: View {
+struct ShowInfoButton: View {
     var handler: (() -> Void)?
 
     var body: some View {
@@ -16,18 +16,19 @@ struct MoveButton: View {
                 handler()
             }
         } label: {
-            Image(systemName: "move.3d")
+            Image(systemName: "eye")
                 .resizable(resizingMode: .stretch)
-                .padding(25)
+                .padding([.top, .bottom], 30)
+                .padding([.leading, .trailing], 20)
                 .frame(width: 100, height: 100)
         }
-        .tint(.btnMove)
-        .foregroundStyle(.white)
+        .tint(.infoBackground)
+        .foregroundStyle(.infoText)
         .glassBackgroundEffect()
     }
 }
 
 #Preview(windowStyle: .plain) {
-    MoveButton()
+    ShowInfoButton()
         .preferredColorScheme(.light)
 }

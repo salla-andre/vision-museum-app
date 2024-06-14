@@ -1,5 +1,5 @@
 //
-//  AttachmentsEnum.swift
+//  Attachments.swift
 //  MuseumApp
 //
 //  Created by André Salla on 13/06/24.

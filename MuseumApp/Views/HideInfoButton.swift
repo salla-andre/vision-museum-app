@@ -1,33 +1,34 @@
 //
-//  MoveButton.swift
+//  HideInfoButton.swift
 //  MuseumApp
 //
-//  Created by André Salla on 13/06/24.
+//  Created by André Salla on 14/06/24.
 //
 
 import SwiftUI
 
-struct MoveButton: View {
+struct HideInfoButton: View {
     var handler: (() -> Void)?
-
+    
     var body: some View {
         Button {
             if let handler {
                 handler()
             }
         } label: {
-            Image(systemName: "move.3d")
+            Image(systemName: "eye.slash")
                 .resizable(resizingMode: .stretch)
-                .padding(25)
+                .padding([.top, .bottom], 25)
+                .padding([.leading, .trailing], 20)
                 .frame(width: 100, height: 100)
         }
-        .tint(.btnMove)
-        .foregroundStyle(.white)
+        .tint(.infoBackground)
+        .foregroundStyle(.btnClose)
         .glassBackgroundEffect()
     }
 }
 
 #Preview(windowStyle: .plain) {
-    MoveButton()
+    HideInfoButton()
         .preferredColorScheme(.light)
 }
