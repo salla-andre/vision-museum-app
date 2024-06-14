@@ -14,45 +14,65 @@ struct ImmersiveView: View {
     @Environment(MuseumViewModel.self) var model
 
     var body: some View {
-        RealityView { content in
-            if let entity = try? await Entity(named: "ImmersiveScene", in: realityKitContentBundle) {
+        RealityView { content, attachments in
+            var attachmentDict: [Attachments : Entity] = [:]
+            for item in Attachments.allCases {
+                if let attachment = attachments.entity(for: item) {
+                    attachmentDict[item] = attachment
+                }
+            }
+            for entity in await model.loadEntities(with: attachmentDict) {
                 content.add(entity)
-
-                // Add an ImageBasedLight for the immersive content
-                guard let resource = try? await EnvironmentResource(named: "Sunlight") else { return }
-                let iblComponent = ImageBasedLightComponent(source: .single(resource), intensityExponent: 0.25)
-                entity.components.set(iblComponent)
-                entity.components.set(ImageBasedLightReceiverComponent(imageBasedLight: entity))
-                
-                /* Occluded floor */
-                let floor = ModelEntity(mesh: .generatePlane(width: 100, depth: 100), materials: [OcclusionMaterial()])
-                floor.generateCollisionShapes(recursive: false)
-                floor.components[PhysicsBodyComponent.self] = .init(
-                  massProperties: .default,
-                  mode: .static
-                )
-                
-                content.add(floor)
+            }
+        } attachments: {
+            Attachment(id: Attachments.moveButtonStart) {
+                MoveButton {
+                    Task {
+                        model.enterMoveState()
+                    }
+                }
+            }
+            Attachment(id: Attachments.moveButtonStop) {
+                MoveStopButton {
+                    Task {
+                        model.leaveMoveState()
+                    }
+                }
             }
         }
         .gesture(DragGesture()
             .targetedToAnyEntity()
             .handActivationBehavior(.pinch)
             .onChanged { value in
-                if model.dragStartPoint == nil {
-                    model.dragStartPoint = value.entity.position
-                }
-                let point = value.convert(value.translation3D, from: .local, to: .scene)
-                value.entity.position = model.dragStartPoint! + SIMD3(
-                    x: point.x,
-                    y: value.entity.position.y,
-                    z: point.z
+                model.move(
+                    entity: value.entity,
+                    translate: value.convert(
+                        value.translation3D,
+                        from: .local,
+                        to: .scene
+                    )
                 )
             }
-            .onEnded({ _  in
-                model.dragStartPoint = nil
-            })
+            .onEnded { _  in
+                model.stop()
+            }
         )
+        .gesture(TapGesture()
+            .targetedToAnyEntity()
+            .onEnded { value in
+                model.activate(entity: value.entity)
+            }
+        )
+    }
+    
+    func add(
+        attachment attachmentType: Attachments,
+        from attachmentObject: RealityViewAttachments,
+        in attachmentDict: inout [Attachments : Entity]
+    ) {
+        if let attachment = attachmentObject.entity(for: attachmentType) {
+            attachmentDict[attachmentType] = attachment
+        }
     }
 }
 

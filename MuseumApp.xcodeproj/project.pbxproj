@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		12269E372C19C5160062AE7D /* MuseumViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E362C19C5160062AE7D /* MuseumViewModel.swift */; };
 		12269E422C1A58DB0062AE7D /* sunlight.skybox in Resources */ = {isa = PBXBuildFile; fileRef = 12269E412C1A58DB0062AE7D /* sunlight.skybox */; };
+		12269E4B2C1B8E3C0062AE7D /* MoveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E4A2C1B8E3C0062AE7D /* MoveButton.swift */; };
+		12269E4D2C1BAC700062AE7D /* AttachmentsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E4C2C1BAC700062AE7D /* AttachmentsEnum.swift */; };
+		12269E4F2C1BBA630062AE7D /* ActiveEntityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */; };
+		12269E532C1C27EF0062AE7D /* MoveStopButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E522C1C27EF0062AE7D /* MoveStopButton.swift */; };
 		12F0AAF62C17919E00F95DB5 /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = 12F0AAF52C17919E00F95DB5 /* RealityKitContent */; };
 		12F0AAF82C17919E00F95DB5 /* MuseumApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F0AAF72C17919E00F95DB5 /* MuseumApp.swift */; };
 		12F0AAFA2C17919E00F95DB5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F0AAF92C17919E00F95DB5 /* ContentView.swift */; };
@@ -20,6 +24,10 @@
 /* Begin PBXFileReference section */
 		12269E362C19C5160062AE7D /* MuseumViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseumViewModel.swift; sourceTree = "<group>"; };
 		12269E412C1A58DB0062AE7D /* sunlight.skybox */ = {isa = PBXFileReference; lastKnownFileType = file.skybox; path = sunlight.skybox; sourceTree = "<group>"; };
+		12269E4A2C1B8E3C0062AE7D /* MoveButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveButton.swift; sourceTree = "<group>"; };
+		12269E4C2C1BAC700062AE7D /* AttachmentsEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsEnum.swift; sourceTree = "<group>"; };
+		12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveEntityModel.swift; sourceTree = "<group>"; };
+		12269E522C1C27EF0062AE7D /* MoveStopButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveStopButton.swift; sourceTree = "<group>"; };
 		12F0AAF02C17919E00F95DB5 /* MuseumApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuseumApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F0AAF42C17919E00F95DB5 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
 		12F0AAF72C17919E00F95DB5 /* MuseumApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseumApp.swift; sourceTree = "<group>"; };
@@ -45,8 +53,18 @@
 		12269E382C1A55D20062AE7D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				12269E4C2C1BAC700062AE7D /* AttachmentsEnum.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		12269E492C1B8DE90062AE7D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				12269E4A2C1B8E3C0062AE7D /* MoveButton.swift */,
+				12269E522C1C27EF0062AE7D /* MoveStopButton.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		12F0AAE72C17919E00F95DB5 = {
@@ -69,6 +87,8 @@
 		12F0AAF22C17919E00F95DB5 /* MuseumApp */ = {
 			isa = PBXGroup;
 			children = (
+				12269E492C1B8DE90062AE7D /* Views */,
+				12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */,
 				12269E382C1A55D20062AE7D /* Extensions */,
 				12F0AAF72C17919E00F95DB5 /* MuseumApp.swift */,
 				12F0AAF92C17919E00F95DB5 /* ContentView.swift */,
@@ -172,8 +192,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12269E532C1C27EF0062AE7D /* MoveStopButton.swift in Sources */,
+				12269E4B2C1B8E3C0062AE7D /* MoveButton.swift in Sources */,
+				12269E4D2C1BAC700062AE7D /* AttachmentsEnum.swift in Sources */,
 				12269E372C19C5160062AE7D /* MuseumViewModel.swift in Sources */,
 				12F0AAFA2C17919E00F95DB5 /* ContentView.swift in Sources */,
+				12269E4F2C1BBA630062AE7D /* ActiveEntityModel.swift in Sources */,
 				12F0AAF82C17919E00F95DB5 /* MuseumApp.swift in Sources */,
 				12F0AAFC2C17919E00F95DB5 /* ImmersiveView.swift in Sources */,
 			);
