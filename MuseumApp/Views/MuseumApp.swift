@@ -10,7 +10,6 @@ import SwiftUI
 @main
 @MainActor
 struct MuseumAppApp: App {
-    @State private var model = MuseumViewModel()
     @State private var appState = AppState()
     
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
@@ -20,19 +19,17 @@ struct MuseumAppApp: App {
         WindowGroup {
             ContentView()
                 .environment(appState)
-        }
+        }.windowStyle(.plain)
 
         ImmersiveSpace(id: "ImmersiveSpace") {
-            ImmersiveView()
-                .environment(model)
+            ImmersiveView(model: MuseumViewModel())
         }
-        .immersionStyle(selection: .constant(.mixed), in: .mixed)
         .onChange(of: scenePhase, initial: true) {
             if scenePhase != .active && appState.isImmerseViewOpen {
                 Task {
-                    appState.isImmerseViewOpen = false
                     await dismissImmersiveSpace()
-                    model = MuseumViewModel()
+                    appState.isImmerseViewOpen = false
+                    appState.isImmerseToggleOn = false
                 }
             }
         }

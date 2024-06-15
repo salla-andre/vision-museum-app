@@ -11,7 +11,7 @@ import RealityKit
 import RealityKitContent
 
 struct ImmersiveView: View {
-    @Environment(MuseumViewModel.self) var model
+    @State var model: MuseumViewModel
 
     var body: some View {
         RealityView { content, attachments in
@@ -97,6 +97,5 @@ struct ImmersiveView: View {
 }
 
 #Preview(immersionStyle: .mixed) {
-    ImmersiveView()
-        .environment(MuseumViewModel())
+    ImmersiveView(model: MuseumViewModel())
 }

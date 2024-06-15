@@ -10,28 +10,23 @@ import RealityKit
 import RealityKitContent
 
 struct ContentView: View {
-
-    @State private var showImmersiveSpace = false
-
     @Environment(\.openImmersiveSpace) var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) var dismissImmersiveSpace
     @Environment(AppState.self) var appState
 
     var body: some View {
+        @Bindable var appState = appState
         VStack {
-            Model3D(named: "Scene", bundle: realityKitContentBundle)
-                .padding(.bottom, 50)
-
-            Text("Hello, world!")
-
-            Toggle("Show ImmersiveSpace", isOn: $showImmersiveSpace)
-                .font(.title)
+            Toggle("Open the Museum View", systemImage: "mountain.2", isOn: $appState.isImmerseToggleOn)
+                .tint(.infoText)
+                .font(.headline)
+                .fontWeight(.black)
                 .frame(width: 360)
-                .padding(24)
+                .padding(36)
                 .glassBackgroundEffect()
         }
         .padding()
-        .onChange(of: showImmersiveSpace) { _, newValue in
+        .onChange(of: appState.isImmerseToggleOn) { _, newValue in
             Task {
                 if newValue {
                     switch await openImmersiveSpace(id: "ImmersiveSpace") {
@@ -41,11 +36,13 @@ struct ContentView: View {
                         fallthrough
                     @unknown default:
                         appState.isImmerseViewOpen = false
-                        showImmersiveSpace = false
+                        appState.isImmerseToggleOn = false
                     }
                 } else if appState.isImmerseViewOpen {
                     await dismissImmersiveSpace()
                     appState.isImmerseViewOpen = false
+                } else {
+                    
                 }
             }
         }
@@ -54,4 +51,5 @@ struct ContentView: View {
 
 #Preview(windowStyle: .automatic) {
     ContentView()
+        .environment(AppState())
 }
