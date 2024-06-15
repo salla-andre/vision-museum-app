@@ -51,4 +51,8 @@ On the back of the bust, a signature of the author and the year are visible: “
 """
         }
     }
+    
+    static func itemByEntity(named name: String) -> Self? {
+        Self.allCases.first(where: { $0.entityGroupName == name })
+    }
 }

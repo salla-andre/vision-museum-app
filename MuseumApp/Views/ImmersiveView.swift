@@ -25,35 +25,27 @@ struct ImmersiveView: View {
                 content.add(entity)
             }
         } attachments: {
-            Attachment(id: Attachments.infoButtonShow) {
-                ShowInfoButton {
-                    Task {
-                        model.show(attachment: .infoButtonShow)
+            ForEach(Attachments.allCases, id: \.hashValue) { attachment in
+                Attachment(id: attachment) {
+                    switch attachment {
+                        case .infoView(let item): 
+                            InfoView(model: .init(item: item))
+                        case.infoButtonHide(_):
+                            HideInfoButton {
+                                Task { model.hideInfo(for: attachment) }
+                            }
+                        case.infoButtonShow(_):
+                            ShowInfoButton {
+                                Task { model.showInfo(for: attachment) }
+                            }
                     }
                 }
-            }
-            Attachment(id: Attachments.infoButtonHide) {
-                HideInfoButton {
-                    Task {
-                        model.hide(attachment: .infoButtonHide)
-                    }
-                }
-            }
-            Attachment(id: Attachments.infoView(item: .ballot)) {
-                InfoView(model: .init(item: .ballot))
-            }
-            Attachment(id: Attachments.infoView(item: .bust)) {
-                InfoView(model: .init(item: .bust))
-            }
-            Attachment(id: Attachments.infoView(item: .vase)) {
-                InfoView(model: .init(item: .vase))
             }
         }
         .gesture(
             LongPressGesture()
                 .targetedToAnyEntity()
                 .onEnded { value in
-                    model.hide(attachment: .infoView(item: .ballot))
                     model.startMove(entity: value.entity)
                 }
                 .sequenced(

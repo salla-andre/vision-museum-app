@@ -29,40 +29,9 @@ final class MuseumViewModel {
         return content
     }
 
-    func hide(attachment: Attachments) {
-        guard let entity = attachments[attachment],
-              let parent = entity.parent else { return }
-
-        entity.components[OpacityComponent.self]?.opacity = 0.0
-        
-        attachments[.infoButtonShow]?.removeFromParent()
-        addAttachment(
-            attachments[.infoButtonHide],
-            to: parent,
-            with: -0.025,
-            position: .left
-        )
-    }
-
-    func show(attachment: Attachments) {
-        guard let entity = attachments[attachment],
-              let parent = entity.parent else { return }
-
-        entity.components[OpacityComponent.self]?.opacity = 0.0
-        
-        attachments[.infoButtonHide]?.removeFromParent()
-        addAttachment(
-            attachments[.infoButtonShow],
-            to: parent,
-            with: -0.025,
-            position: .left
-        )
-    }
-
     func move(entity: Entity, translate translation3D: SIMD3<Float>) {
         guard let activeEntity = activeEntity,
               activeEntity.entity == entity,
-              activeEntity.state == .move,
               let startPoint = activeEntity.dragStartPoint
         else { return }
 
@@ -75,8 +44,7 @@ final class MuseumViewModel {
     
     func rotate(entity: Entity, with rotation: Rotation3D) {
         guard let activeEntity = activeEntity,
-              activeEntity.entity == entity,
-              activeEntity.state == .move
+              activeEntity.entity == entity
         else { return }
 
         let flippedRotation = Rotation3D(angle: rotation.angle,
@@ -93,11 +61,19 @@ final class MuseumViewModel {
         activeEntity?.moveOverlay?.removeFromParent()
         activeEntity = nil
     }
+    
+    func showInfo(for attachment: Attachments) {
+        toggle(attachment: attachment)
+    }
+    
+    func hideInfo(for attachment: Attachments) {
+        toggle(attachment: attachment, hide: true)
+    }
 
     func startMove(entity: Entity) {
         guard activeEntity == nil else { return }
         
-        let activeModel = ActiveEntityModel(entity: entity, state: .move)
+        let activeModel = ActiveEntityModel(entity: entity)
         activeEntity = activeModel
 
         activeModel.dragStartPoint = entity.position
@@ -143,18 +119,45 @@ final class MuseumViewModel {
     private func prepare(attachments: [Attachments: Entity], at entity: Entity) {
         self.attachments = attachments
         attachments.forEach { (id, attachment) in
-            guard
-                case let .infoView(item) = id,
-                let itemEntity = entity.findEntity(named: item.entityGroupName)
-            else { return }
-            attachment.components.set(OpacityComponent(opacity: 1.0))
+            guard let itemEntity = entity.findEntity(named: id.item.entityGroupName) else { return }
+            
+            attachment.components.set(OpacityComponent(opacity: id.isShow ? 1.0 : 0.0))
+            
+            let adjustments: (width: Float, height: Float) = if case .infoView(_) = id {
+                (
+                    width: (Float(InfoView.maxWidht) / 2000) / 2,
+                    height: (((Float(InfoView.maxHeight) / 2000) / 2) + 0.1) * -1
+                )
+            } else {
+                (
+                    width: -0.025,
+                    height: 0.025
+                )
+            }
+
             addAttachment(
                 attachment,
                 to: itemEntity,
                 // half of width from point to meters
-                with: (Float(InfoView.maxWidht) / 2000) / 2,
-                and: (((Float(InfoView.maxHeight) / 2000) / 2) + 0.1) * -1,
+                with: adjustments.width,
+                and: adjustments.height,
                 position: .right)
         }
+    }
+    
+    private func toggle(attachment: Attachments, hide: Bool = false) {
+        guard let entity = attachments[attachment] else { return }
+
+        entity.components[OpacityComponent.self]?.opacity = 0.0
+        
+        if let oppositeAttachment = attachment.opposite {
+            attachments[oppositeAttachment]?
+                .components[OpacityComponent.self]?
+                .opacity = 1.0
+        }
+        
+        attachments[.infoView(item: attachment.item)]?
+            .components[OpacityComponent.self]?
+            .opacity = hide ? 0.0 : 1.0
     }
 }
