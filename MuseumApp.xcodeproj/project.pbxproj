@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		120199502C1E34970072ECA4 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1201994F2C1E34970072ECA4 /* AppState.swift */; };
 		12269E372C19C5160062AE7D /* MuseumViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E362C19C5160062AE7D /* MuseumViewModel.swift */; };
 		12269E4D2C1BAC700062AE7D /* Attachments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E4C2C1BAC700062AE7D /* Attachments.swift */; };
 		12269E4F2C1BBA630062AE7D /* ActiveEntityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1201994F2C1E34970072ECA4 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		12269E362C19C5160062AE7D /* MuseumViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseumViewModel.swift; sourceTree = "<group>"; };
 		12269E4C2C1BAC700062AE7D /* Attachments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachments.swift; sourceTree = "<group>"; };
 		12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveEntityModel.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 			children = (
 				12269E582C1C958C0062AE7D /* InfoModel.swift */,
 				12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */,
+				1201994F2C1E34970072ECA4 /* AppState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -252,6 +255,7 @@
 				12269E4F2C1BBA630062AE7D /* ActiveEntityModel.swift in Sources */,
 				12F0AAF82C17919E00F95DB5 /* MuseumApp.swift in Sources */,
 				12269E572C1C94EB0062AE7D /* InfoView.swift in Sources */,
+				120199502C1E34970072ECA4 /* AppState.swift in Sources */,
 				12E973CB2C1CA9DE003D9D83 /* HideInfoButton.swift in Sources */,
 				12F0AAFC2C17919E00F95DB5 /* ImmersiveView.swift in Sources */,
 				12269E592C1C958C0062AE7D /* InfoModel.swift in Sources */,

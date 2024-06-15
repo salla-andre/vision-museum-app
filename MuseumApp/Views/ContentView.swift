@@ -12,10 +12,10 @@ import RealityKitContent
 struct ContentView: View {
 
     @State private var showImmersiveSpace = false
-    @State private var immersiveSpaceIsShown = false
 
     @Environment(\.openImmersiveSpace) var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) var dismissImmersiveSpace
+    @Environment(AppState.self) var appState
 
     var body: some View {
         VStack {
@@ -36,16 +36,16 @@ struct ContentView: View {
                 if newValue {
                     switch await openImmersiveSpace(id: "ImmersiveSpace") {
                     case .opened:
-                        immersiveSpaceIsShown = true
+                        appState.isImmerseViewOpen = true
                     case .error, .userCancelled:
                         fallthrough
                     @unknown default:
-                        immersiveSpaceIsShown = false
+                        appState.isImmerseViewOpen = false
                         showImmersiveSpace = false
                     }
-                } else if immersiveSpaceIsShown {
+                } else if appState.isImmerseViewOpen {
                     await dismissImmersiveSpace()
-                    immersiveSpaceIsShown = false
+                    appState.isImmerseViewOpen = false
                 }
             }
         }
