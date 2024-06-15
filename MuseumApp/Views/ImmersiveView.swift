@@ -14,6 +14,7 @@ struct ImmersiveView: View {
     @State var model: MuseumViewModel
 
     var body: some View {
+        // MARK: - View Setup
         RealityView { content, attachments in
             var attachmentDict: [Attachments : Entity] = [:]
             for attachment in Attachments.allCases {
@@ -24,7 +25,9 @@ struct ImmersiveView: View {
             for entity in await model.loadEntities(with: attachmentDict) {
                 content.add(entity)
             }
-        } attachments: {
+        }
+        // MARK: - Attachments
+          attachments: {
             ForEach(Attachments.allCases, id: \.hashValue) { attachment in
                 Attachment(id: attachment) {
                     switch attachment {
@@ -42,6 +45,7 @@ struct ImmersiveView: View {
                 }
             }
         }
+        // MARK: - Gestures
         .gesture(
             LongPressGesture()
                 .targetedToAnyEntity()
@@ -85,6 +89,7 @@ struct ImmersiveView: View {
         )
     }
     
+    // MARK: - Utilities
     func add(
         attachment attachmentType: Attachments,
         from attachmentObject: RealityViewAttachments,

@@ -17,6 +17,8 @@ final class MuseumViewModel {
     private var attachments: [Attachments : Entity] = [:]
     private var activeEntity: ActiveEntityModel?
 
+    // MARK: - Setup
+    
     func loadEntities(with attachments: [Attachments: Entity]) async -> [Entity] {
         var content: [Entity] = []
         
@@ -40,72 +42,6 @@ final class MuseumViewModel {
         }
         
         return content
-    }
-
-    func move(entity: Entity, translate translation3D: SIMD3<Float>) {
-        guard let activeEntity = activeEntity,
-              activeEntity.entity == entity,
-              let startPoint = activeEntity.dragStartPoint
-        else { return }
-
-         entity.position = startPoint + SIMD3(
-             x: translation3D.x,
-             y: entity.position.y,
-             z: translation3D.z
-         )
-    }
-    
-    func rotate(entity: Entity, with rotation: Rotation3D) {
-        guard let activeEntity = activeEntity,
-              activeEntity.entity == entity
-        else { return }
-
-        let flippedRotation = Rotation3D(angle: rotation.angle,
-                                         axis: RotationAxis3D(x: Rotation3D.identity.axis.x,
-                                                              y: rotation.axis.y,
-                                                              z: Rotation3D.identity.axis.z))
-
-        let newOrientation = Rotation3D.identity.rotated(by: flippedRotation)
-        entity.setOrientation(.init(newOrientation), relativeTo: nil)
-                              
-    }
-    
-    func stop() {
-        activeEntity?.moveOverlay?.removeFromParent()
-        activeEntity = nil
-    }
-    
-    func showInfo(for attachment: Attachments) {
-        toggle(attachment: attachment)
-    }
-    
-    func hideInfo(for attachment: Attachments) {
-        toggle(attachment: attachment, hide: true)
-    }
-
-    func startMove(entity: Entity) {
-        guard activeEntity == nil else { return }
-        
-        let activeModel = ActiveEntityModel(entity: entity)
-        activeEntity = activeModel
-
-        activeModel.dragStartPoint = entity.position
-        activeModel.orientationStart = entity.orientation(relativeTo: nil)
-        
-        let extraSpace: Float = 0.05
-        
-        // adding extra 5 cm so the overlay doesn't colide with its parent
-        let extends =
-            activeModel.entity.visualBounds(relativeTo: entity).extents +
-            [extraSpace, extraSpace, extraSpace]
-        let overlay = ModelEntity(
-            mesh: .generateBox(width: extends.x, height: extends.y, depth: extends.z, cornerRadius: 0.025),
-            materials: [SimpleMaterial(color: .gray.withAlphaComponent(0.75), isMetallic: false)]
-        )
-        overlay.components.set(OpacityComponent(opacity: 0.3))
-        activeModel.moveOverlay = overlay
-        entity.addChild(overlay)
-        overlay.position = SIMD3(x: 0.0, y: (extends.y / 2.0) - 0.025, z: 0.0)
     }
     
     private func addAttachment(
@@ -162,6 +98,76 @@ final class MuseumViewModel {
                 and: adjustments.height,
                 position: .right)
         }
+    }
+    
+    // MARK: - Gesture Handlers
+
+    func move(entity: Entity, translate translation3D: SIMD3<Float>) {
+        guard let activeEntity = activeEntity,
+              activeEntity.entity == entity,
+              let startPoint = activeEntity.dragStartPoint
+        else { return }
+
+         entity.position = startPoint + SIMD3(
+             x: translation3D.x,
+             y: entity.position.y,
+             z: translation3D.z
+         )
+    }
+    
+    func rotate(entity: Entity, with rotation: Rotation3D) {
+        guard let activeEntity = activeEntity,
+              activeEntity.entity == entity
+        else { return }
+
+        let flippedRotation = Rotation3D(angle: rotation.angle,
+                                         axis: RotationAxis3D(x: Rotation3D.identity.axis.x,
+                                                              y: rotation.axis.y,
+                                                              z: Rotation3D.identity.axis.z))
+
+        let newOrientation = Rotation3D.identity.rotated(by: flippedRotation)
+        entity.setOrientation(.init(newOrientation), relativeTo: nil)
+                              
+    }
+    
+    func startMove(entity: Entity) {
+        guard activeEntity == nil else { return }
+        
+        let activeModel = ActiveEntityModel(entity: entity)
+        activeEntity = activeModel
+
+        activeModel.dragStartPoint = entity.position
+        activeModel.orientationStart = entity.orientation(relativeTo: nil)
+        
+        let extraSpace: Float = 0.05
+        
+        // adding extra 5 cm so the overlay doesn't colide with its parent
+        let extends =
+            activeModel.entity.visualBounds(relativeTo: entity).extents +
+            [extraSpace, extraSpace, extraSpace]
+        let overlay = ModelEntity(
+            mesh: .generateBox(width: extends.x, height: extends.y, depth: extends.z, cornerRadius: 0.025),
+            materials: [SimpleMaterial(color: .gray.withAlphaComponent(0.75), isMetallic: false)]
+        )
+        overlay.components.set(OpacityComponent(opacity: 0.3))
+        activeModel.moveOverlay = overlay
+        entity.addChild(overlay)
+        overlay.position = SIMD3(x: 0.0, y: (extends.y / 2.0) - 0.025, z: 0.0)
+    }
+    
+    // MARK: - Attachments Actions
+    
+    func stop() {
+        activeEntity?.moveOverlay?.removeFromParent()
+        activeEntity = nil
+    }
+    
+    func showInfo(for attachment: Attachments) {
+        toggle(attachment: attachment)
+    }
+    
+    func hideInfo(for attachment: Attachments) {
+        toggle(attachment: attachment, hide: true)
     }
     
     private func toggle(attachment: Attachments, hide: Bool = false) {
