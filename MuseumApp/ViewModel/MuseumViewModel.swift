@@ -135,16 +135,18 @@ final class MuseumViewModel {
             guard let itemEntity = entity.findEntity(named: id.item.entityGroupName) else { return }
             
             attachment.components.set(OpacityComponent(opacity: id.isShow ? 0.8 : 0.0))
-            
             if id.opposite != nil {
                 attachment.components.set(HoverEffectComponent())
             }
             
             let adjustments: (width: Float, height: Float) = if case .infoView(_) = id {
-                (
-                    width: (Float(InfoView.maxWidht) / 2000) / 2,
-                    height: (((Float(InfoView.maxHeight) / 2000) / 2) + 0.1) * -1
-                )
+// The simulator and device have different behavior positioning
+// the attachment so we have different values per platform.
+#if targetEnvironment(simulator)
+                (width: 0.175, height: -0.250)
+#else
+                (width: 0.125, height: -0.175)
+#endif
             } else {
                 (
                     width: -0.025,
