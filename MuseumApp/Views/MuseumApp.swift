@@ -19,7 +19,9 @@ struct MuseumAppApp: App {
         WindowGroup {
             ContentView()
                 .environment(appState)
-        }.windowStyle(.plain)
+        }
+        .windowStyle(.plain)
+        .defaultSize(width: 500, height: 150)
 
         ImmersiveSpace(id: "ImmersiveSpace") {
             ImmersiveView(model: MuseumViewModel())
