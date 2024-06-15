@@ -121,7 +121,11 @@ final class MuseumViewModel {
         attachments.forEach { (id, attachment) in
             guard let itemEntity = entity.findEntity(named: id.item.entityGroupName) else { return }
             
-            attachment.components.set(OpacityComponent(opacity: id.isShow ? 1.0 : 0.0))
+            attachment.components.set(OpacityComponent(opacity: id.isShow ? 0.8 : 0.0))
+            
+            if id.opposite != nil {
+                attachment.components.set(HoverEffectComponent())
+            }
             
             let adjustments: (width: Float, height: Float) = if case .infoView(_) = id {
                 (
@@ -153,7 +157,7 @@ final class MuseumViewModel {
         if let oppositeAttachment = attachment.opposite {
             attachments[oppositeAttachment]?
                 .components[OpacityComponent.self]?
-                .opacity = 1.0
+                .opacity = 0.8
         }
         
         attachments[.infoView(item: attachment.item)]?
