@@ -107,6 +107,7 @@ final class MuseumViewModel {
               activeEntity.entity == entity,
               let startPoint = activeEntity.dragStartPoint
         else { return }
+        activeEntity.isDragging = true
 
          entity.position = startPoint + SIMD3(
              x: translation3D.x,
@@ -119,6 +120,7 @@ final class MuseumViewModel {
         guard let activeEntity = activeEntity,
               activeEntity.entity == entity
         else { return }
+        activeEntity.isDragging = true
 
         let flippedRotation = Rotation3D(angle: rotation.angle,
                                          axis: RotationAxis3D(x: Rotation3D.identity.axis.x,
@@ -130,7 +132,7 @@ final class MuseumViewModel {
                               
     }
     
-    func startMove(entity: Entity) {
+    func startMove(entity: Entity) async {
         guard activeEntity == nil else { return }
         
         let activeModel = ActiveEntityModel(entity: entity)
@@ -153,6 +155,17 @@ final class MuseumViewModel {
         activeModel.moveOverlay = overlay
         entity.addChild(overlay)
         overlay.position = SIMD3(x: 0.0, y: (extends.y / 2.0) - 0.025, z: 0.0)
+        
+        // Await for the first movement to happen in 1.5 seconds. After that, cancels the movement.
+        do {
+            try await Task.sleep(nanoseconds: 1_500_000_000)
+            if !activeModel.isDragging {
+                overlay.removeFromParent()
+                activeEntity = nil
+            }
+        } catch {
+            print(error)
+        }
     }
     
     // MARK: - Attachments Actions

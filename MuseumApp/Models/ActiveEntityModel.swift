@@ -14,6 +14,7 @@ class ActiveEntityModel {
     var orientationStart: simd_quatf? = nil
     var activeAttachmentsStart: [Attachments] = []
     var moveOverlay: Entity? = nil
+    var isDragging = false
     
     init(entity: Entity) {
         self.entity = entity

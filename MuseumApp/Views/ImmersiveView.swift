@@ -50,7 +50,9 @@ struct ImmersiveView: View {
             LongPressGesture()
                 .targetedToAnyEntity()
                 .onEnded { value in
-                    model.startMove(entity: value.entity)
+                    Task {
+                        await model.startMove(entity: value.entity)
+                    }
                 }
                 .sequenced(
                     before: DragGesture()
