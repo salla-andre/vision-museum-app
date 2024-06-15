@@ -20,6 +20,7 @@ enum ActiveEntityState {
 class ActiveEntityModel {
     let entity: Entity
     var dragStartPoint: SIMD3<Float>? = nil
+    var orientationStart: simd_quatf? = nil
     var moveOverlay: Entity? = nil
     var state: ActiveEntityState
     

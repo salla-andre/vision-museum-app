@@ -53,20 +53,38 @@ struct ImmersiveView: View {
             LongPressGesture()
                 .targetedToAnyEntity()
                 .onEnded { value in
+                    model.hide(attachment: .infoView(item: .ballot))
                     model.startMove(entity: value.entity)
                 }
                 .sequenced(
                     before: DragGesture()
                         .targetedToAnyEntity()
+                        .simultaneously(
+                            with: RotateGesture3D()
+                                .targetedToAnyEntity()
+                        )
                         .onChanged { value in
-                            model.move(
-                                entity: value.entity,
-                                translate: value.convert(
-                                    value.translation3D,
-                                    from: .local,
-                                    to: .scene
+                            let drag = value.first
+                            let rotate = value.second
+                            
+                            if let drag = drag {
+                                model.move(
+                                    entity: drag.entity,
+                                    translate: drag.convert(
+                                        drag.translation3D,
+                                        from: .local,
+                                        to: .scene
+                                    )
                                 )
-                            )
+                            }
+                            
+                            if let rotate = rotate {
+                                model.rotate(
+                                    entity: rotate.entity,
+                                    with: rotate.rotation
+                                )
+                            }
+                            
                         }
                         .onEnded { _  in
                             model.stop()

@@ -30,11 +30,33 @@ final class MuseumViewModel {
     }
 
     func hide(attachment: Attachments) {
+        guard let entity = attachments[attachment],
+              let parent = entity.parent else { return }
 
+        entity.components[OpacityComponent.self]?.opacity = 0.0
+        
+        attachments[.infoButtonShow]?.removeFromParent()
+        addAttachment(
+            attachments[.infoButtonHide],
+            to: parent,
+            with: -0.025,
+            position: .left
+        )
     }
 
     func show(attachment: Attachments) {
+        guard let entity = attachments[attachment],
+              let parent = entity.parent else { return }
+
+        entity.components[OpacityComponent.self]?.opacity = 0.0
         
+        attachments[.infoButtonHide]?.removeFromParent()
+        addAttachment(
+            attachments[.infoButtonShow],
+            to: parent,
+            with: -0.025,
+            position: .left
+        )
     }
 
     func move(entity: Entity, translate translation3D: SIMD3<Float>) {
@@ -51,6 +73,22 @@ final class MuseumViewModel {
          )
     }
     
+    func rotate(entity: Entity, with rotation: Rotation3D) {
+        guard let activeEntity = activeEntity,
+              activeEntity.entity == entity,
+              activeEntity.state == .move
+        else { return }
+
+        let flippedRotation = Rotation3D(angle: rotation.angle,
+                                         axis: RotationAxis3D(x: Rotation3D.identity.axis.x,
+                                                              y: rotation.axis.y,
+                                                              z: Rotation3D.identity.axis.z))
+
+        let newOrientation = Rotation3D.identity.rotated(by: flippedRotation)
+        entity.setOrientation(.init(newOrientation), relativeTo: nil)
+                              
+    }
+    
     func stop() {
         activeEntity?.moveOverlay?.removeFromParent()
         activeEntity = nil
@@ -63,6 +101,7 @@ final class MuseumViewModel {
         activeEntity = activeModel
 
         activeModel.dragStartPoint = entity.position
+        activeModel.orientationStart = entity.orientation(relativeTo: nil)
         
         let extraSpace: Float = 0.05
         
