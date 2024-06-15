@@ -12,53 +12,14 @@ reorder rootPrims = ["Root", "WoodPlank"]
 
 def Xform "Root"
 {
-    reorder nameChildren = ["VaseGroup", "BallotGroup", "BustGroup", "WoodPlank"]
+    reorder nameChildren = ["VaseGroup", "BallotGroup", "ImageBasedLight", "BustGroup", "Sphere", "WoodPlank"]
     def Xform "BustGroup" (
         active = true
     )
     {
-        reorder nameChildren = ["Cube", "Bust"]
+        reorder nameChildren = ["InputTarget", "RigidBody", "Collider", "ImageBasedLightReceiver", "GroundingShadow", "Group"]
         float3 xformOp:translate = (0.75, 0, -1.5)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        def "Bust" (
-            active = true
-            references = @Bust.usdz@
-        )
-        {
-            reorder nameChildren = ["Materials", "Meshes", "RigidBody", "Collider"]
-            float3 xformOp:scale = (0.003, 0.003, 0.003)
-            float3 xformOp:translate = (0, 0.89, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-        }
-
-        def Cube "Cube" (
-            active = true
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/WoodPlank> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-            double size = 0.7000000000000001
-            quatf xformOp:orient = (1, 0, 0, 0)
-            float3 xformOp:scale = (1, 0.75, 1)
-            float3 xformOp:translate = (0, 0.25, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-            def Material "DefaultMaterial"
-            {
-                prepend token outputs:surface.connect = </Root/BustGroup/Cube/DefaultMaterial/DefaultSurfaceShader.outputs:surface>
-
-                def Shader "DefaultSurfaceShader"
-                {
-                    uniform token info:id = "UsdPreviewSurface"
-                    color3f inputs:diffuseColor = (1, 1, 1)
-                    float inputs:roughness = 0.75
-                    token outputs:surface
-                }
-            }
-        }
 
         def RealityKitComponent "InputTarget"
         {
@@ -67,14 +28,23 @@ def Xform "Root"
 
         def RealityKitComponent "RigidBody"
         {
-            bool gravityEnabled = 0
+            float angularDamping = -1
+            bool gravityEnabled = 1
             uniform token info:id = "RealityKit.RigidBody"
+            float linearDamping = -1
+            bool lockRotationX = 1
             bool lockRotationY = 1
+            bool lockRotationZ = 1
+            bool lockTranslationX = 0
             bool lockTranslationY = 1
-            token motionType = "Kinematic"
+            bool lockTranslationZ = 0
+            token motionType = "Dynamic"
 
             def RealityKitStruct "massFrame"
             {
+                float3 m_inertia = (0.1, 0.1, 0.1)
+                float m_mass = 0.001
+
                 def RealityKitStruct "m_pose"
                 {
                 }
@@ -106,8 +76,73 @@ def Xform "Root"
 
         def RealityKitComponent "ImageBasedLightReceiver"
         {
-            rel iblEntity = </Root>
+            rel iblEntity = </Root/Sphere>
             uniform token info:id = "RealityKit.ImageBasedLightReceiver"
+        }
+
+        def RealityKitComponent "GroundingShadow"
+        {
+            bool enableIBLShadow = 1
+            bool enableMeshShadow = 1
+            uniform token info:id = "RealityKit.GroundingShadow"
+        }
+
+        def "Bust" (
+            active = true
+            references = @Bust.usdz@
+        )
+        {
+            reorder nameChildren = ["Materials", "Meshes", "RigidBody", "Collider"]
+            float3 xformOp:scale = (0.003, 0.003, 0.003)
+            float3 xformOp:translate = (0, 0.89, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+            over "Meshes"
+            {
+                over "Sketchfab_model"
+                {
+                    over "MCh_S_12_Rzezba_Popiersie_Rozy_Loewenfeld_OBJ_cleaner_gles"
+                    {
+                        over "Object_2"
+                        {
+                            over "Object_3"
+                            {
+                                over "Object_0"
+                                {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        def Cube "Cube" (
+            active = true
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Root/WoodPlank> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            double size = 0.7000000000000001
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (1, 0.75, 1)
+            float3 xformOp:translate = (0, 0.25, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+            def Material "DefaultMaterial"
+            {
+                token outputs:surface.connect = </Root/BustGroup/Cube/DefaultMaterial/DefaultSurfaceShader.outputs:surface>
+
+                def Shader "DefaultSurfaceShader"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    color3f inputs:diffuseColor = (1, 1, 1)
+                    float inputs:roughness = 0.75
+                    token outputs:surface
+                }
+            }
         }
     }
 
@@ -201,43 +236,74 @@ def Xform "Root"
         active = true
     )
     {
-        reorder nameChildren = ["Cylinder", "Vase", "InputTarget", "Collider", "RigidBody", "Cylinder_1"]
+        reorder nameChildren = ["InputTarget", "Collider", "RigidBody", "ImageBasedLightReceiver", "GroundingShadow", "Group"]
         float3 xformOp:translate = (0, 0, -2.5)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
-        def Cylinder "Cylinder" (
-            active = true
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
+        def RealityKitComponent "InputTarget"
         {
-            reorder nameChildren = ["DefaultMaterial", "RigidBody", "Collider", "WoodPlank"]
-            uniform token axis = "Y"
-            double height = 0.8
-            rel material:binding = </Root/WoodPlank> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-            double radius = 0.1
-            quatf xformOp:orient = (1, 0, 0, 0)
-            float3 xformOp:scale = (1, 1, 1)
-            float3 xformOp:translate = (0, 0.4, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            uniform token info:id = "RealityKit.InputTarget"
+        }
 
-            def Material "DefaultMaterial"
+        def RealityKitComponent "Collider"
+        {
+            uint group = 1
+            uniform token info:id = "RealityKit.Collider"
+            uint mask = 4294967295
+            token type = "Default"
+
+            def RealityKitStruct "Shape"
             {
-                token outputs:mtlx:surface
-                token outputs:realitykit:vertex
-                token outputs:surface.connect = </Root/VaseGroup/Cylinder/DefaultMaterial/DefaultSurfaceShader.outputs:surface>
-                float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (0, 109.5)
-                float2 ui:nodegraph:realitykit:subgraphOutputs:size = (181.5, 99)
+                float3 extent = (0.2289248, 1.099955, 0.20212466)
+                token shapeType = "Box"
 
-                def Shader "DefaultSurfaceShader"
+                def RealityKitStruct "pose"
                 {
-                    uniform token info:id = "UsdPreviewSurface"
-                    color3f inputs:diffuseColor = (1, 1, 1)
-                    float inputs:roughness = 0.75
-                    token outputs:surface
+                    float3 position = (0.0005336702, 0.5499775, -0.0010623261)
                 }
             }
+        }
+
+        def RealityKitComponent "RigidBody"
+        {
+            float angularDamping = -1
+            bool gravityEnabled = 1
+            uniform token info:id = "RealityKit.RigidBody"
+            float linearDamping = -1
+            bool lockRotationX = 1
+            bool lockRotationY = 1
+            bool lockRotationZ = 1
+            bool lockTranslationX = 0
+            bool lockTranslationY = 1
+            bool lockTranslationZ = 0
+            token motionType = "Dynamic"
+
+            def RealityKitStruct "massFrame"
+            {
+                float3 m_inertia = (0.1, 0.1, 0.1)
+                float m_mass = 0.001
+
+                def RealityKitStruct "m_pose"
+                {
+                }
+            }
+
+            def RealityKitStruct "material"
+            {
+            }
+        }
+
+        def RealityKitComponent "ImageBasedLightReceiver"
+        {
+            rel iblEntity = </Root/Sphere>
+            uniform token info:id = "RealityKit.ImageBasedLightReceiver"
+        }
+
+        def RealityKitComponent "GroundingShadow"
+        {
+            bool enableIBLShadow = 1
+            bool enableMeshShadow = 1
+            uniform token info:id = "RealityKit.GroundingShadow"
         }
 
         def "Vase" (
@@ -311,6 +377,50 @@ def Xform "Root"
             }
         }
 
+        def Cylinder "Cylinder" (
+            active = true
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            reorder nameChildren = ["DefaultMaterial", "RigidBody", "Collider", "WoodPlank"]
+            uniform token axis = "Y"
+            double height = 0.8
+            rel material:binding = </Root/WoodPlank> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            double radius = 0.1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (1, 1, 1)
+            float3 xformOp:translate = (0, 0.4, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+            def Material "DefaultMaterial"
+            {
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+                token outputs:surface.connect = </Root/VaseGroup/Cylinder/DefaultMaterial/DefaultSurfaceShader.outputs:surface>
+                float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (0, 109.5)
+                float2 ui:nodegraph:realitykit:subgraphOutputs:size = (181.5, 99)
+
+                def Shader "DefaultSurfaceShader"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    color3f inputs:diffuseColor = (1, 1, 1)
+                    float inputs:roughness = 0.75
+                    token outputs:surface
+                }
+            }
+        }
+    }
+
+    def Xform "BallotGroup" (
+        active = true
+    )
+    {
+        reorder nameChildren = ["InputTarget", "Collider", "RigidBody", "ImageBasedLightReceiver", "GroundingShadow", "Group"]
+        float3 xformOp:translate = (-0.75, 0, -1.5)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
         def RealityKitComponent "InputTarget"
         {
             uniform token info:id = "RealityKit.InputTarget"
@@ -325,26 +435,35 @@ def Xform "Root"
 
             def RealityKitStruct "Shape"
             {
-                float3 extent = (0.2289248, 1.099955, 0.20212466)
+                float3 extent = (0.3, 1.4012045, 0.3)
                 token shapeType = "Box"
 
                 def RealityKitStruct "pose"
                 {
-                    float3 position = (0.0005336702, 0.5499775, -0.0010623261)
+                    float3 position = (0, 0.70060223, 0)
                 }
             }
         }
 
         def RealityKitComponent "RigidBody"
         {
-            bool gravityEnabled = 0
+            float angularDamping = -1
+            bool gravityEnabled = 1
             uniform token info:id = "RealityKit.RigidBody"
+            float linearDamping = -1
+            bool lockRotationX = 1
             bool lockRotationY = 1
+            bool lockRotationZ = 1
+            bool lockTranslationX = 0
             bool lockTranslationY = 1
-            token motionType = "Kinematic"
+            bool lockTranslationZ = 0
+            token motionType = "Dynamic"
 
             def RealityKitStruct "massFrame"
             {
+                float3 m_inertia = (0.1, 0.1, 0.1)
+                float m_mass = 0.001
+
                 def RealityKitStruct "m_pose"
                 {
                 }
@@ -357,17 +476,70 @@ def Xform "Root"
 
         def RealityKitComponent "ImageBasedLightReceiver"
         {
-            rel iblEntity = </Root>
+            rel iblEntity = </Root/Sphere>
             uniform token info:id = "RealityKit.ImageBasedLightReceiver"
         }
-    }
 
-    def Xform "BallotGroup" (
-        active = true
-    )
-    {
-        float3 xformOp:translate = (-0.75, 0, -1.5)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        def RealityKitComponent "GroundingShadow"
+        {
+            bool enableIBLShadow = 1
+            bool enableMeshShadow = 1
+            uniform token info:id = "RealityKit.GroundingShadow"
+        }
+
+        def "Ballot" (
+            active = true
+            references = @Ballot_box.usdz@
+        )
+        {
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (0.01, 0.01, 0.01)
+            float3 xformOp:translate = (0, 1.1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+            over "Meshes"
+            {
+                over "Sketchfab_model"
+                {
+                    over "_73_5258_IV_Neogotycka_urna_fbx"
+                    {
+                        over "RootNode"
+                        {
+                            over "default"
+                            {
+                                over "default_173_5258_IV_Neogotycka_urna_03_FIN_Material_u1_v1_0"
+                                {
+                                    over "default_173_5258_IV_Neogotycka_urna_03_FIN_Material_u1_v1_0"
+                                    {
+                                    }
+                                }
+
+                                over "default_173_5258_IV_Neogotycka_urna_03_FIN_Material_u1_v1_0_1"
+                                {
+                                    over "default_173_5258_IV_Neogotycka_urna_03_FIN_Material_u1_v1_0"
+                                    {
+                                    }
+                                }
+
+                                over "default_173_5258_IV_Neogotycka_urna_03_FIN_Material_u1_v1_0_2"
+                                {
+                                    over "default_173_5258_IV_Neogotycka_urna_03_FIN_Material_u1_v1_0"
+                                    {
+                                    }
+                                }
+
+                                over "default_173_5258_IV_Neogotycka_urna_03_FIN_Material_u1_v1_0_3"
+                                {
+                                    over "default_173_5258_IV_Neogotycka_urna_03_FIN_Material_u1_v1_0"
+                                    {
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         def Cylinder "Cylinder" (
             active = true
@@ -403,82 +575,42 @@ def Xform "Root"
                 }
             }
         }
-
-        def "Ballot" (
-            active = true
-            references = @Ballot_box.usdz@
-        )
-        {
-            quatf xformOp:orient = (1, 0, 0, 0)
-            float3 xformOp:scale = (0.01, 0.01, 0.01)
-            float3 xformOp:translate = (0, 1.1, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-        }
-
-        def RealityKitComponent "InputTarget"
-        {
-            uniform token info:id = "RealityKit.InputTarget"
-        }
-
-        def RealityKitComponent "Collider"
-        {
-            uint group = 1
-            uniform token info:id = "RealityKit.Collider"
-            uint mask = 4294967295
-            token type = "Default"
-
-            def RealityKitStruct "Shape"
-            {
-                float3 extent = (0.3, 1.4012045, 0.3)
-                token shapeType = "Box"
-
-                def RealityKitStruct "pose"
-                {
-                    float3 position = (0, 0.70060223, 0)
-                }
-            }
-        }
-
-        def RealityKitComponent "RigidBody"
-        {
-            bool gravityEnabled = 0
-            uniform token info:id = "RealityKit.RigidBody"
-            bool lockRotationY = 1
-            bool lockTranslationY = 1
-            token motionType = "Kinematic"
-
-            def RealityKitStruct "massFrame"
-            {
-                def RealityKitStruct "m_pose"
-                {
-                }
-            }
-
-            def RealityKitStruct "material"
-            {
-            }
-        }
-
-        def RealityKitComponent "GroundingShadow"
-        {
-            bool enableIBLShadow = 1
-            bool enableMeshShadow = 1
-            uniform token info:id = "RealityKit.GroundingShadow"
-        }
-
-        def RealityKitComponent "ImageBasedLightReceiver"
-        {
-            rel iblEntity = </Root>
-            uniform token info:id = "RealityKit.ImageBasedLightReceiver"
-        }
     }
 
-    def RealityKitComponent "ImageBasedLight"
+    def Sphere "Sphere" (
+        active = true
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
     {
-        asset ibl = @ImageBasedLighting.skybox/ImageBasedLight.exr@
-        uniform token info:id = "RealityKit.ImageBasedLight"
-        float intensityExponent = 0.25
-        bool isGlobalIBL = 0
+        rel material:binding = </Root/Sphere/DefaultMaterial>
+        double radius = 0.1
+        quatf xformOp:orient = (1, 0, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 2, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def Material "DefaultMaterial"
+        {
+            token outputs:mtlx:surface
+            token outputs:realitykit:vertex
+            prepend token outputs:surface.connect = </Root/Sphere/DefaultMaterial/DefaultSurfaceShader.outputs:surface>
+
+            def Shader "DefaultSurfaceShader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (1, 1, 1)
+                float inputs:opacity = 0
+                float inputs:roughness = 0.75
+                token outputs:surface
+            }
+        }
+
+        def RealityKitComponent "ImageBasedLight"
+        {
+            asset ibl = @ImageBasedLighting.skybox/ImageBasedLight.exr@
+            uniform token info:id = "RealityKit.ImageBasedLight"
+            bool isGlobalIBL = 0
+        }
     }
 }
 

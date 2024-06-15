@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "Rectangle.png",
       "idiom" : "vision",
       "scale" : "2x"
     }

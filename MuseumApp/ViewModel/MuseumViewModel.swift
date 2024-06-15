@@ -23,6 +23,19 @@ final class MuseumViewModel {
         if let entity = try? await Entity(named: "ImmersiveScene", in: realityKitContentBundle) {
             content.append(entity)
 
+            /* Occluded floor */
+            let floor = ModelEntity(
+                mesh: .generatePlane(width: 100, depth: 100),
+                materials: [OcclusionMaterial()]
+            )
+            floor.generateCollisionShapes(recursive: false)
+            floor.components[PhysicsBodyComponent.self] = .init(
+              massProperties: .default,
+              mode: .static
+            )
+            
+            content.append(floor)
+            
             prepare(attachments: attachments, at: entity)
         }
         
