@@ -16,11 +16,8 @@ final class MuseumViewModel {
 
     private var attachments: [Attachments : Entity] = [:]
     private var activeEntity: ActiveEntityModel?
-    private let sessionManager: ARSessionManager
-    
-    init(sessionManager: ARSessionManager) {
-        self.sessionManager = sessionManager
-    }
+    private var sessionManager: ARSessionManager?
+    private var rootEntity: Entity?
 
     // MARK: - Setup
     
@@ -43,12 +40,23 @@ final class MuseumViewModel {
             
             content.append(floor)
             
-            prepare(attachments: attachments, at: entity)
-            
-            await setupWorldAnchors(rootEntity: entity)
+            rootEntity = entity
+            prepare(attachments: attachments)
+            hideAllItems()
+            sessionManager = ARSessionManager()
         }
         
         return content
+    }
+    
+    func unload() {
+        sessionManager?.stopSession()
+        sessionManager = nil
+        attachments = [:]
+        activeEntity = nil
+        sessionManager?.stopSession()
+        sessionManager = nil
+        rootEntity = nil
     }
     
     private func addAttachment(
@@ -72,10 +80,10 @@ final class MuseumViewModel {
         entity.addChild(attachment)
     }
     
-    private func prepare(attachments: [Attachments: Entity], at entity: Entity) {
+    private func prepare(attachments: [Attachments: Entity]) {
         self.attachments = attachments
         attachments.forEach { (id, attachment) in
-            guard let itemEntity = entity.findEntity(named: id.item.entityGroupName) else { return }
+            guard let itemEntity = rootEntity?.findEntity(named: id.item.entityGroupName) else { return }
             
             attachment.components.set(OpacityComponent(opacity: id.isShow ? 0.8 : 0.0))
             if id.opposite != nil {
@@ -163,8 +171,8 @@ final class MuseumViewModel {
         entity.addChild(overlay)
         overlay.position = SIMD3(x: 0.0, y: (extends.y / 2.0) - 0.025, z: 0.0)
         
-        if sessionManager.enabled {
-            sessionManager.detachItem(entity: entity)
+        if sessionManager?.enabled ?? false{
+            sessionManager?.detachItem(entity: entity)
         }
         
         // Await for the first movement to happen in 1.5 seconds. After that, cancels the movement.
@@ -179,10 +187,10 @@ final class MuseumViewModel {
     }
     
     func stop() {
-        if sessionManager.enabled {
+        if sessionManager?.enabled ?? false {
             Task {
                 if let entity = activeEntity?.entity {
-                    await sessionManager.attachItem(entity: entity)
+                    await sessionManager?.attachItem(entity: entity)
                 }
                 activeEntity?.moveOverlay?.removeFromParent()
                 activeEntity = nil
@@ -219,24 +227,22 @@ final class MuseumViewModel {
             .opacity = hide ? 0.0 : 1.0
     }
     
+    func hideAllItems() {
+        guard let rootEntity = rootEntity else { return }
+        Items.allCases.forEach { item in
+            guard let itemEntity = rootEntity.findEntity(named: item.entityGroupName) else { return }
+            itemEntity.components.set(OpacityComponent(opacity: 0.0))
+        }
+    }
+    
     // MARK: World Anchor
-    func setupWorldAnchors(rootEntity: Entity) async {
-        await sessionManager.startSession()
-        
-        guard sessionManager.enabled else { return }
-        
-        sessionManager.setupEntitiesForAnchoring(rootEntity: rootEntity)
-    }
-    
     func runARSession() async {
-        await sessionManager.startSession()
-    }
-    
-    func stopARSession() {
-        sessionManager.stopSession()
+        guard let rootEntity = rootEntity else { return }
+        sessionManager?.setupEntitiesForAnchoring(rootEntity: rootEntity)
+        await sessionManager?.startSession()
     }
     
     func processWorldAnchorUpdates() async {
-        await sessionManager.processWorldAnchorUpdates()
+        await sessionManager?.processWorldAnchorUpdates()
     }
 }

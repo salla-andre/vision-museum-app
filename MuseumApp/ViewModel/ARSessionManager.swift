@@ -63,10 +63,12 @@ class ARSessionManager {
     func setupEntitiesForAnchoring(rootEntity: Entity) {
         self.rootEntity = rootEntity
         readStoredAnchors()
-        anchorRawStorage.values.forEach { entityName in
-            if let itemEntity = rootEntity.findEntity(named: entityName) {
-                // We hide the stored anchored entities so they appear after being positioned
-                itemEntity.components.set(OpacityComponent(opacity: 0.0))
+        Items.allCases.map { $0.entityGroupName }.forEach { groupName in
+            if !anchorRawStorage.values.contains(where: { $0 == groupName }) {
+                rootEntity
+                    .findEntity(named: groupName)?
+                    .components[OpacityComponent.self]?
+                    .opacity = 1.0
             }
         }
     }

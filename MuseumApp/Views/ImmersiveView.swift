@@ -98,7 +98,7 @@ struct ImmersiveView: View {
             await model.processWorldAnchorUpdates()
         }
         .onDisappear(perform: {
-            model.stopARSession()
+            model.unload()
         })
     }
     
@@ -115,8 +115,7 @@ struct ImmersiveView: View {
 }
 
 #Preview(immersionStyle: .mixed) {
-    let sessionManager = ARSessionManager()
     ImmersiveView(
-        model: MuseumViewModel(sessionManager: ARSessionManager())
+        model: MuseumViewModel()
     )
 }
