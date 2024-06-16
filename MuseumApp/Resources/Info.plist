@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSWorldSensingUsageDescription</key>
-	<string>XPTO</string>
+	<string>We need access to your surroundings to pin the objects when you move them. If you opt out, the positions of your objects will reset every time you open the Museum.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationPreferredDefaultSceneSessionRole</key>
