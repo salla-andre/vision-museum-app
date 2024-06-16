@@ -24,7 +24,11 @@ struct MuseumAppApp: App {
         .defaultSize(width: 500, height: 150)
 
         ImmersiveSpace(id: "ImmersiveSpace") {
-            ImmersiveView(model: MuseumViewModel())
+            ImmersiveView(
+                model: MuseumViewModel(
+                    sessionManager: ARSessionManager()
+                )
+            )
         }
         .onChange(of: scenePhase, initial: true) {
             if scenePhase != .active && appState.isImmerseViewOpen {

@@ -25,6 +25,11 @@ struct ImmersiveView: View {
             for entity in await model.loadEntities(with: attachmentDict) {
                 content.add(entity)
             }
+            
+            Task {
+                // Run the ARKit session after the user opens the immersive space.
+                await model.runARSession()
+            }
         }
         // MARK: - Attachments
           attachments: {
@@ -89,6 +94,12 @@ struct ImmersiveView: View {
                         }
                 )
         )
+        .task {
+            await model.processWorldAnchorUpdates()
+        }
+        .onDisappear(perform: {
+            model.stopARSession()
+        })
     }
     
     // MARK: - Utilities
@@ -104,5 +115,8 @@ struct ImmersiveView: View {
 }
 
 #Preview(immersionStyle: .mixed) {
-    ImmersiveView(model: MuseumViewModel())
+    let sessionManager = ARSessionManager()
+    ImmersiveView(
+        model: MuseumViewModel(sessionManager: ARSessionManager())
+    )
 }

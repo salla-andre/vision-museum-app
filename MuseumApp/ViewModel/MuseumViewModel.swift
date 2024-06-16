@@ -16,6 +16,11 @@ final class MuseumViewModel {
 
     private var attachments: [Attachments : Entity] = [:]
     private var activeEntity: ActiveEntityModel?
+    private let sessionManager: ARSessionManager
+    
+    init(sessionManager: ARSessionManager) {
+        self.sessionManager = sessionManager
+    }
 
     // MARK: - Setup
     
@@ -39,6 +44,8 @@ final class MuseumViewModel {
             content.append(floor)
             
             prepare(attachments: attachments, at: entity)
+            
+            await setupWorldAnchors(rootEntity: entity)
         }
         
         return content
@@ -156,24 +163,37 @@ final class MuseumViewModel {
         entity.addChild(overlay)
         overlay.position = SIMD3(x: 0.0, y: (extends.y / 2.0) - 0.025, z: 0.0)
         
+        if sessionManager.enabled {
+            sessionManager.detachItem(entity: entity)
+        }
+        
         // Await for the first movement to happen in 1.5 seconds. After that, cancels the movement.
         do {
             try await Task.sleep(nanoseconds: 1_500_000_000)
             if !activeModel.isDragging {
-                overlay.removeFromParent()
-                activeEntity = nil
+                stop()
             }
         } catch {
             print(error)
         }
     }
     
-    // MARK: - Attachments Actions
-    
     func stop() {
-        activeEntity?.moveOverlay?.removeFromParent()
-        activeEntity = nil
+        if sessionManager.enabled {
+            Task {
+                if let entity = activeEntity?.entity {
+                    await sessionManager.attachItem(entity: entity)
+                }
+                activeEntity?.moveOverlay?.removeFromParent()
+                activeEntity = nil
+            }
+        } else {
+            activeEntity?.moveOverlay?.removeFromParent()
+            activeEntity = nil
+        }
     }
+    
+    // MARK: - Attachments Actions
     
     func showInfo(for attachment: Attachments) {
         toggle(attachment: attachment)
@@ -197,5 +217,26 @@ final class MuseumViewModel {
         attachments[.infoView(item: attachment.item)]?
             .components[OpacityComponent.self]?
             .opacity = hide ? 0.0 : 1.0
+    }
+    
+    // MARK: World Anchor
+    func setupWorldAnchors(rootEntity: Entity) async {
+        await sessionManager.startSession()
+        
+        guard sessionManager.enabled else { return }
+        
+        sessionManager.setupEntitiesForAnchoring(rootEntity: rootEntity)
+    }
+    
+    func runARSession() async {
+        await sessionManager.startSession()
+    }
+    
+    func stopARSession() {
+        sessionManager.stopSession()
+    }
+    
+    func processWorldAnchorUpdates() async {
+        await sessionManager.processWorldAnchorUpdates()
     }
 }

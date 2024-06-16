@@ -10,11 +10,7 @@ import Foundation
 @MainActor
 @Observable
 class AppState {
-    var isImmerseViewOpen: Bool
-    var isImmerseToggleOn: Bool
-    
-    init(isImmerseViewOpen: Bool = false, isImmerseToggleOn: Bool = false) {
-        self.isImmerseViewOpen = isImmerseViewOpen
-        self.isImmerseToggleOn = isImmerseToggleOn
-    }
+    var isImmerseViewOpen: Bool = false
+    var isImmerseToggleOn: Bool = false
+    var providersStoppedWithError: Bool = false    
 }
