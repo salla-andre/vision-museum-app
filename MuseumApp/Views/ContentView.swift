@@ -45,6 +45,9 @@ struct ContentView: View {
             }
         }
         .task {
+            // Asking authorization before opening the ImmersiveSpace
+            // so we may provide a better experience if it fails or
+            // if the user denies access.
             await ARSessionManager.requestAuthorization()
         }
     }

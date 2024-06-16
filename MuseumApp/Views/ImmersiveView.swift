@@ -22,6 +22,8 @@ struct ImmersiveView: View {
                     attachmentDict[attachment] = entity
                 }
             }
+            // We collect all the expected attachments and map them
+            // so we can attach it to their corresponding entities
             for entity in await model.loadEntities(with: attachmentDict) {
                 content.add(entity)
             }
@@ -56,6 +58,8 @@ struct ImmersiveView: View {
                 .targetedToAnyEntity()
                 .onEnded { value in
                     Task {
+                        // After the long press finishes, we indicate the
+                        // moving state have started.
                         await model.startMove(entity: value.entity)
                     }
                 }
@@ -90,11 +94,16 @@ struct ImmersiveView: View {
                             
                         }
                         .onEnded { _  in
+                            // After the drag/rotate finishes we stop the
+                            // moving state and place the object in the
+                            // corresponding anchor (if enabled)
                             model.stop()
                         }
                 )
         )
         .onDisappear(perform: {
+            // We reset the singleton so we can have a clean session
+            // if the user reopens it.
             model.unload()
         })
     }

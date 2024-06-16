@@ -22,13 +22,14 @@ class ARSessionManager {
     private var worldAnchors: [UUID: WorldAnchor] = [:]
     // A map of world anchor UUIDs to the objects that are about to be attached to them.
     private var objectsBeingAnchored: [UUID: Entity] = [:]
-    
+    // A snapshot of the stored anchors from the persistence file
     private var anchorRawStorage: [UUID: String] = [:]
     
     var arkitSession = ARKitSession()
     var worldSensingAuthorizationStatus = ARKitSession.AuthorizationStatus.notDetermined
     var errorDetected = false
     
+    // We just enable the ARSession if we have authorization and no error have been detected
     var enabled: Bool {
         worldSensingAuthorizationStatus == .allowed && !errorDetected
     }
@@ -37,12 +38,14 @@ class ARSessionManager {
     
     // MARK: Public methods
     
+    /// Static method to request authorization before we initialize an AR Session
     static func requestAuthorization() async {
         if WorldTrackingProvider.isSupported {
             _ = await ARKitSession().requestAuthorization(for: [.worldSensing])
         }
     }
     
+    /// Starts a new ARSession if the permission was given by the user and starts listenning to anchor updates from the world provider
     func startSession() async {
         if WorldTrackingProvider.isSupported {
             let authorizationResult = await arkitSession.requestAuthorization(for: [.worldSensing])
@@ -61,11 +64,14 @@ class ARSessionManager {
         }
     }
     
+    /// Stops the AR Session and persists the current anchors
     func stopSession() {
         arkitSession.stop()
         writeStoredAnchors()
     }
     
+    /// Reads the persisted anchor files and shows the objects that don't have a stored anchor
+    /// The objects with stored anchors will be shown later, when the provider sets their positions
     func setupEntitiesForAnchoring(rootEntity: Entity) {
         self.rootEntity = rootEntity
         readStoredAnchors()
@@ -79,6 +85,7 @@ class ARSessionManager {
         }
     }
 
+    /// Loads the persisted anchors from the persistence file
     func readStoredAnchors() {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 
@@ -94,6 +101,7 @@ class ARSessionManager {
         anchorRawStorage = fileStorageObject
     }
     
+    /// Write the existing anchors from the memory to the persistence file
     func writeStoredAnchors() {
         var worldAnchorsToFileNames: [UUID: String] = [:]
         for (anchorID, object) in anchoredObjects {
@@ -109,6 +117,7 @@ class ARSessionManager {
     }
     
     @MainActor
+    /// Attaches an object after the user moves it
     func attachItem(entity: Entity) async {
         // First, create a new world anchor and try to add it to the world tracking provider.
         let anchor = WorldAnchor(originFromAnchorTransform: entity.transformMatrix(relativeTo: nil))
@@ -122,6 +131,7 @@ class ARSessionManager {
     }
     
     @MainActor
+    /// Dettaches an object before the user moves it
     func detachItem(entity: Entity) {
         guard let anchorID = anchoredObjects.first(where: { $0.value === entity })?.key else {
             return
@@ -138,6 +148,7 @@ class ARSessionManager {
     // MARK: Private methods
     
     @MainActor
+    /// Processes the anchors updates provided by the WorldProvider
     private func process(_ anchorUpdate: AnchorUpdate<WorldAnchor>) {
         let anchor = anchorUpdate.anchor
         
@@ -157,6 +168,8 @@ class ARSessionManager {
                     anchoredObjects[anchor.id] = entity
                 }
             } else if let objectBeingAnchored = objectsBeingAnchored[anchor.id] {
+                // We don't need to set the position when updating because
+                // that was already made by the user
                 objectsBeingAnchored.removeValue(forKey: anchor.id)
                 anchoredObjects[anchor.id] = objectBeingAnchored
             } else {
@@ -184,7 +197,13 @@ class ARSessionManager {
     private func setValues(entity: Entity?, anchor: WorldAnchor) {
         let xyzMask = SIMD3(0, 1, 2)
         let origin = anchor.originFromAnchorTransform
-        entity?.position = origin.columns.3[xyzMask].replacing(with: [0.0, 0.0, 0.0], where: [false, true, false])
+        entity?.position = origin
+            .columns.3[xyzMask]
+            // We don't want to change the Y position, so we replace it with 0
+            // because sometimes the World Anchor returns a different value
+            // if it wrongly determines the anchor position in the current
+            // session.
+            .replacing(with: [0.0, 0.0, 0.0], where: [false, true, false])
         
         let rotationMatrix = matrix_float3x3(origin.columns.0[xyzMask],
                                              origin.columns.1[xyzMask],

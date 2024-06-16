@@ -14,21 +14,26 @@ import Spatial
 @MainActor
 final class MuseumViewModel {
 
+    // Map of all available Attachments and their corresponding entities
     private var attachments: [Attachments : Entity] = [:]
+    // The moving entity while dragging/rotating
     private var activeEntity: ActiveEntityModel?
+    // The rootEntity loaded from RealityKit Content
     private var rootEntity: Entity?
     
     var sessionManager: ARSessionManager?
 
     // MARK: - Setup
     
+    /// Loads the ImmersiveScene, adds the attachments to their corresponding childs and prepares
+    /// the entity to be shown.
     func loadEntities(with attachments: [Attachments: Entity]) async -> [Entity] {
         var content: [Entity] = []
         
         if let entity = try? await Entity(named: "ImmersiveScene", in: realityKitContentBundle) {
             content.append(entity)
 
-            /* Occluded floor */
+            // Occluded floor
             let floor = ModelEntity(
                 mesh: .generatePlane(width: 100, depth: 100),
                 materials: [OcclusionMaterial()]
@@ -42,7 +47,10 @@ final class MuseumViewModel {
             content.append(floor)
             
             rootEntity = entity
+            // Hide and place the attachments along their corresponding entities
             prepare(attachments: attachments)
+            // Hide all items so we can wait for their positions to load from
+            // saved Anchors before they appear in the screen.
             hideAllItems()
             sessionManager = ARSessionManager()
         }
@@ -50,6 +58,7 @@ final class MuseumViewModel {
         return content
     }
     
+    /// Resets the Model state and stop all active AR sessions
     func unload() {
         sessionManager?.stopSession()
         sessionManager = nil
@@ -107,7 +116,6 @@ final class MuseumViewModel {
             addAttachment(
                 attachment,
                 to: itemEntity,
-                // half of width from point to meters
                 with: adjustments.width,
                 and: adjustments.height,
                 position: .right)
@@ -116,6 +124,7 @@ final class MuseumViewModel {
     
     // MARK: - Gesture Handlers
 
+    /// Moves the given entity to the indicated point
     func move(entity: Entity, translate translation3D: SIMD3<Float>) {
         guard let activeEntity = activeEntity,
               activeEntity.entity == entity,
@@ -130,6 +139,7 @@ final class MuseumViewModel {
          )
     }
     
+    /// Rotates the given entity with the given 3D rotation info
     func rotate(entity: Entity, with rotation: Rotation3D) {
         guard let activeEntity = activeEntity,
               activeEntity.entity == entity
@@ -137,6 +147,7 @@ final class MuseumViewModel {
         activeEntity.isDragging = true
 
         let flippedRotation = Rotation3D(angle: rotation.angle,
+                                         // we just allow the rotation over the Y axis
                                          axis: RotationAxis3D(x: Rotation3D.identity.axis.x,
                                                               y: rotation.axis.y,
                                                               z: Rotation3D.identity.axis.z))
@@ -146,6 +157,7 @@ final class MuseumViewModel {
                               
     }
     
+    /// Starts the Movement State and displays the Movement container over the moving element
     func startMove(entity: Entity) async {
         guard activeEntity == nil else { return }
         
@@ -161,6 +173,7 @@ final class MuseumViewModel {
         let extends =
             activeModel.entity.visualBounds(relativeTo: entity).extents +
             [extraSpace, extraSpace, extraSpace]
+        // We create a box to act as a Movement container while the user is moving the object
         let overlay = ModelEntity(
             mesh: .generateBox(width: extends.x, height: extends.y, depth: extends.z, cornerRadius: 0.025),
             materials: [SimpleMaterial(color: .gray.withAlphaComponent(0.75), isMetallic: false)]
@@ -171,10 +184,12 @@ final class MuseumViewModel {
         overlay.position = SIMD3(x: 0.0, y: (extends.y / 2.0) - 0.025, z: 0.0)
         
         if sessionManager?.enabled ?? false{
+            // Before start moving, we detach the anchor so it can be updated when the new position is set.
             sessionManager?.detachItem(entity: entity)
         }
         
-        // Await for the first movement to happen in 1.5 seconds. After that, cancels the movement.
+        // Await for the first movement to happen in 1.5 seconds.
+        // After that, cancels the movement if it hasn't started yet.
         do {
             try await Task.sleep(nanoseconds: 1_500_000_000)
             if !activeModel.isDragging {
@@ -185,6 +200,7 @@ final class MuseumViewModel {
         }
     }
     
+    /// Stops the moving state, persists the new position anchor and removes the moving container
     func stop() {
         if sessionManager?.enabled ?? false {
             Task {
@@ -202,10 +218,12 @@ final class MuseumViewModel {
     
     // MARK: - Attachments Actions
     
+    /// Displays the Info View of a given Object
     func showInfo(for attachment: Attachments) {
         toggle(attachment: attachment)
     }
     
+    /// Hides the Info View of a given Object
     func hideInfo(for attachment: Attachments) {
         toggle(attachment: attachment, hide: true)
     }
@@ -215,17 +233,20 @@ final class MuseumViewModel {
 
         entity.components[OpacityComponent.self]?.opacity = 0.0
         
+        // After hiding the current attachment, we show its corresponding opposite element
         if let oppositeAttachment = attachment.opposite {
             attachments[oppositeAttachment]?
                 .components[OpacityComponent.self]?
                 .opacity = 0.8
         }
         
+        // We show/hide the Info View depending on the state of the toggle
         attachments[.infoView(item: attachment.item)]?
             .components[OpacityComponent.self]?
             .opacity = hide ? 0.0 : 1.0
     }
     
+    /// Hides all objects in the Immersive View
     func hideAllItems() {
         guard let rootEntity = rootEntity else { return }
         Items.allCases.forEach { item in
@@ -235,6 +256,8 @@ final class MuseumViewModel {
     }
     
     // MARK: World Anchor
+    
+    /// Starts the AR Session and setup it for the loaded entities
     func runARSession() async {
         guard let rootEntity = rootEntity else { return }
         sessionManager?.setupEntitiesForAnchoring(rootEntity: rootEntity)
