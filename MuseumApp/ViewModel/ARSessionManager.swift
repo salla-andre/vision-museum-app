@@ -184,7 +184,7 @@ class ARSessionManager {
     private func setValues(entity: Entity?, anchor: WorldAnchor) {
         let xyzMask = SIMD3(0, 1, 2)
         let origin = anchor.originFromAnchorTransform
-        entity?.position = origin.columns.3[xyzMask]
+        entity?.position = origin.columns.3[xyzMask].replacing(with: [0.0, 0.0, 0.0], where: [false, true, false])
         
         let rotationMatrix = matrix_float3x3(origin.columns.0[xyzMask],
                                              origin.columns.1[xyzMask],
