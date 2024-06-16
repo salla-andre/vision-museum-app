@@ -37,6 +37,12 @@ class ARSessionManager {
     
     // MARK: Public methods
     
+    static func requestAuthorization() async {
+        if WorldTrackingProvider.isSupported {
+            _ = await ARKitSession().requestAuthorization(for: [.worldSensing])
+        }
+    }
+    
     func startSession() async {
         if WorldTrackingProvider.isSupported {
             let authorizationResult = await arkitSession.requestAuthorization(for: [.worldSensing])

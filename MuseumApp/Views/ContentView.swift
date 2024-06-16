@@ -41,10 +41,11 @@ struct ContentView: View {
                 } else if appState.isImmerseViewOpen {
                     await dismissImmersiveSpace()
                     appState.isImmerseViewOpen = false
-                } else {
-                    
                 }
             }
+        }
+        .task {
+            await ARSessionManager.requestAuthorization()
         }
     }
 }
