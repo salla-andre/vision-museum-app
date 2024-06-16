@@ -16,8 +16,9 @@ final class MuseumViewModel {
 
     private var attachments: [Attachments : Entity] = [:]
     private var activeEntity: ActiveEntityModel?
-    private var sessionManager: ARSessionManager?
     private var rootEntity: Entity?
+    
+    var sessionManager: ARSessionManager?
 
     // MARK: - Setup
     
@@ -54,8 +55,6 @@ final class MuseumViewModel {
         sessionManager = nil
         attachments = [:]
         activeEntity = nil
-        sessionManager?.stopSession()
-        sessionManager = nil
         rootEntity = nil
     }
     
@@ -240,9 +239,5 @@ final class MuseumViewModel {
         guard let rootEntity = rootEntity else { return }
         sessionManager?.setupEntitiesForAnchoring(rootEntity: rootEntity)
         await sessionManager?.startSession()
-    }
-    
-    func processWorldAnchorUpdates() async {
-        await sessionManager?.processWorldAnchorUpdates()
     }
 }

@@ -94,9 +94,6 @@ struct ImmersiveView: View {
                         }
                 )
         )
-        .task {
-            await model.processWorldAnchorUpdates()
-        }
         .onDisappear(perform: {
             model.unload()
         })

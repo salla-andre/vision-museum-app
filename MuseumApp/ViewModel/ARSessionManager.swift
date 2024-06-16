@@ -9,6 +9,7 @@ import ARKit
 import RealityKit
 import Foundation
 
+@Observable
 class ARSessionManager {
     
     var appState: AppState? = nil
@@ -46,18 +47,17 @@ class ARSessionManager {
                 errorDetected = true
             }
         }
+        Task.detached { [weak self] in
+            guard let self else { return }
+            for await anchorUpdate in self.worldTracking.anchorUpdates {
+                await self.process(anchorUpdate)
+            }
+        }
     }
     
     func stopSession() {
         arkitSession.stop()
         writeStoredAnchors()
-    }
-    
-    @MainActor
-    func processWorldAnchorUpdates() async {
-        for await anchorUpdate in worldTracking.anchorUpdates {
-            process(anchorUpdate)
-        }
     }
     
     func setupEntitiesForAnchoring(rootEntity: Entity) {
