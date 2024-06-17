@@ -1,4 +1,4 @@
-# My Museum
+# My Own Museum
 
 ![App Screenshot](screenshot.png)
 
@@ -89,3 +89,7 @@ To move/rotate the objects, long press the desired object until a transparent bo
 - Objects pushed by other objects while dragging won’t have their new position persisted.
 - The app doesn’t detect walls, so the objects can be dragged beyond walls and over objects like tables.
 - The Info View doesn’t have a physical body and may overlay other objects in the virtual space.
+
+## Demo
+
+Check the demo video at Youtube: https://youtu.be/qvMUUy7tPao
