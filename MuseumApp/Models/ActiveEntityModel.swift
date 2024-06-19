@@ -12,7 +12,6 @@ class ActiveEntityModel {
     let entity: Entity
     var dragStartPoint: SIMD3<Float>? = nil
     var orientationStart: simd_quatf? = nil
-    var activeAttachmentsStart: [Attachments] = []
     var moveOverlay: Entity? = nil
     var isDragging = false
     

@@ -8,6 +8,7 @@
 import ARKit
 import RealityKit
 import Foundation
+import QuartzCore
 
 @Observable
 class ARSessionManager {
@@ -24,6 +25,8 @@ class ARSessionManager {
     private var objectsBeingAnchored: [UUID: Entity] = [:]
     // A snapshot of the stored anchors from the persistence file
     private var anchorRawStorage: [UUID: String] = [:]
+    
+    private var deviceAnchor: DeviceAnchor?
     
     var arkitSession = ARKitSession()
     var worldSensingAuthorizationStatus = ARKitSession.AuthorizationStatus.notDetermined
@@ -54,6 +57,7 @@ class ARSessionManager {
                 try await arkitSession.run([worldTracking])
             } catch {
                 errorDetected = true
+                return
             }
         }
         Task.detached { [weak self] in
@@ -142,6 +146,27 @@ class ARSessionManager {
             // The world anchor is no longer needed; remove it so that it doesn't
             // remain in the app’s list of world anchors forever.
             try? await worldTracking.removeAnchor(forID: anchorID)
+        }
+    }
+    
+    @MainActor
+    /// Updates attachments direction to face the user head
+    func updateRelativeToDevicePosition(attachments: [Entity]) async {
+        // Device anchors are only available when the provider is running.
+        guard worldTracking.state == .running else { return }
+        
+        let deviceAnchor = worldTracking.queryDeviceAnchor(atTimestamp: CACurrentMediaTime())
+
+        guard let deviceAnchor, deviceAnchor.isTracked else { return }
+        
+        let xyzMask = SIMD3(0, 1, 2)
+
+        attachments.forEach { entity in
+            let device = deviceAnchor.originFromAnchorTransform
+            entity.look(at: device.columns.3[xyzMask],
+                        from: entity.position(relativeTo: nil),
+                        relativeTo: nil,
+                        forward: .positiveZ)
         }
     }
     

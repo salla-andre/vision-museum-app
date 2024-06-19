@@ -16,8 +16,8 @@ struct ImmersiveView: View {
     var body: some View {
         // MARK: - View Setup
         RealityView { content, attachments in
-            var attachmentDict: [Attachments : Entity] = [:]
-            for attachment in Attachments.allCases {
+            var attachmentDict: [Items : Entity] = [:]
+            for attachment in Items.allCases {
                 if let entity = attachments.entity(for: attachment) {
                     attachmentDict[attachment] = entity
                 }
@@ -35,20 +35,9 @@ struct ImmersiveView: View {
         }
         // MARK: - Attachments
           attachments: {
-            ForEach(Attachments.allCases, id: \.hashValue) { attachment in
-                Attachment(id: attachment) {
-                    switch attachment {
-                        case .infoView(let item): 
-                            InfoView(model: .init(item: item))
-                        case.infoButtonHide(_):
-                            HideInfoButton {
-                                Task { model.hideInfo(for: attachment) }
-                            }
-                        case.infoButtonShow(_):
-                            ShowInfoButton {
-                                Task { model.showInfo(for: attachment) }
-                            }
-                    }
+            ForEach(Items.allCases, id: \.hashValue) { item in
+                Attachment(id: item) {
+                    InfoView(model: .init(item: item))
                 }
             }
         }
@@ -106,17 +95,6 @@ struct ImmersiveView: View {
             // if the user reopens it.
             model.unload()
         })
-    }
-    
-    // MARK: - Utilities
-    func add(
-        attachment attachmentType: Attachments,
-        from attachmentObject: RealityViewAttachments,
-        in attachmentDict: inout [Attachments : Entity]
-    ) {
-        if let attachment = attachmentObject.entity(for: attachmentType) {
-            attachmentDict[attachmentType] = attachment
-        }
     }
 }
 

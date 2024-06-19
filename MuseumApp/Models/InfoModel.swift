@@ -10,6 +10,7 @@ import Foundation
 struct InfoModel {
     let title: String
     let description: String
+    var state: InfoViewState = .hide
     
     init(item: Items) {
         self.title = item.title

@@ -15,7 +15,7 @@ import Spatial
 final class MuseumViewModel {
 
     // Map of all available Attachments and their corresponding entities
-    private var attachments: [Attachments : Entity] = [:]
+    private var attachments: [Items : Entity] = [:]
     // The moving entity while dragging/rotating
     private var activeEntity: ActiveEntityModel?
     // The rootEntity loaded from RealityKit Content
@@ -27,7 +27,7 @@ final class MuseumViewModel {
     
     /// Loads the ImmersiveScene, adds the attachments to their corresponding childs and prepares
     /// the entity to be shown.
-    func loadEntities(with attachments: [Attachments: Entity]) async -> [Entity] {
+    func loadEntities(with attachments: [Items: Entity]) async -> [Entity] {
         var content: [Entity] = []
         
         if let entity = try? await Entity(named: "ImmersiveScene", in: realityKitContentBundle) {
@@ -69,17 +69,14 @@ final class MuseumViewModel {
     
     private func addAttachment(
         _ attachment: Entity?,
-        to entity: Entity?,
-        with extraX: Float = 0.0,
-        and extraY: Float = 0.0,
-        position: AttachmentPosition
+        to entity: Entity?
     ) {
         guard let attachment = attachment, let entity = entity else { return }
         let extents = entity.visualBounds(relativeTo: entity).extents
         // aligned with the left border with 10 cm of space between the atachment and the entity
-        let attachmentX =  ((extents.x / 2.0) + extraX + 0.1) * (position == .left ? -1 : 1)
+        let attachmentX =  ((extents.x / 2.0) + 0.25)
         // the center of the entity height
-        let attachmentY = extents.y + extraY
+        let attachmentY = extents.y
         
         attachment.removeFromParent()
         
@@ -88,37 +85,12 @@ final class MuseumViewModel {
         entity.addChild(attachment)
     }
     
-    private func prepare(attachments: [Attachments: Entity]) {
+    private func prepare(attachments: [Items: Entity]) {
         self.attachments = attachments
         attachments.forEach { (id, attachment) in
-            guard let itemEntity = rootEntity?.findEntity(named: id.item.entityGroupName) else { return }
-            
-            attachment.components.set(OpacityComponent(opacity: id.isShow ? 0.8 : 0.0))
-            if id.opposite != nil {
-                attachment.components.set(HoverEffectComponent())
-            }
-            
-            let adjustments: (width: Float, height: Float) = if case .infoView(_) = id {
-// The simulator and device have different behavior positioning
-// the attachment so we have different values per platform.
-#if targetEnvironment(simulator)
-                (width: 0.175, height: -0.250)
-#else
-                (width: 0.125, height: -0.175)
-#endif
-            } else {
-                (
-                    width: -0.025,
-                    height: 0.025
-                )
-            }
-
-            addAttachment(
-                attachment,
-                to: itemEntity,
-                with: adjustments.width,
-                and: adjustments.height,
-                position: .right)
+            guard let itemEntity = rootEntity?.findEntity(named: id.entityGroupName) else { return }
+            attachment.components.set(OpacityComponent(opacity: 1.0))
+            addAttachment(attachment, to: itemEntity)
         }
     }
     
@@ -216,35 +188,7 @@ final class MuseumViewModel {
         }
     }
     
-    // MARK: - Attachments Actions
-    
-    /// Displays the Info View of a given Object
-    func showInfo(for attachment: Attachments) {
-        toggle(attachment: attachment)
-    }
-    
-    /// Hides the Info View of a given Object
-    func hideInfo(for attachment: Attachments) {
-        toggle(attachment: attachment, hide: true)
-    }
-    
-    private func toggle(attachment: Attachments, hide: Bool = false) {
-        guard let entity = attachments[attachment] else { return }
-
-        entity.components[OpacityComponent.self]?.opacity = 0.0
-        
-        // After hiding the current attachment, we show its corresponding opposite element
-        if let oppositeAttachment = attachment.opposite {
-            attachments[oppositeAttachment]?
-                .components[OpacityComponent.self]?
-                .opacity = 0.8
-        }
-        
-        // We show/hide the Info View depending on the state of the toggle
-        attachments[.infoView(item: attachment.item)]?
-            .components[OpacityComponent.self]?
-            .opacity = hide ? 0.0 : 1.0
-    }
+    // MARK: - Attachments
     
     /// Hides all objects in the Immersive View
     func hideAllItems() {
@@ -262,5 +206,40 @@ final class MuseumViewModel {
         guard let rootEntity = rootEntity else { return }
         sessionManager?.setupEntitiesForAnchoring(rootEntity: rootEntity)
         await sessionManager?.startSession()
+        guard sessionManager?.enabled ?? false else { return }
+        Task.detached { [weak self] in
+            guard let self else { return }
+            await self.run(
+                function: self.updateRelativeToDevicePosition,
+                withFrequency: 90
+            )
+        }
+    }
+    
+    func updateRelativeToDevicePosition() async {
+        await sessionManager?
+            .updateRelativeToDevicePosition(
+                attachments: Array(attachments.values)
+            )
+    }
+    
+    @MainActor
+    func run(function: () async -> Void, withFrequency hz: UInt64) async {
+        while true {
+            if Task.isCancelled {
+                return
+            }
+            
+            // Sleep for 1 s / hz before calling the function.
+            let nanoSecondsToSleep: UInt64 = NSEC_PER_SEC / hz
+            do {
+                try await Task.sleep(nanoseconds: nanoSecondsToSleep)
+            } catch {
+                // Sleep fails when the Task is cancelled. Exit the loop.
+                return
+            }
+            
+            await function()
+        }
     }
 }

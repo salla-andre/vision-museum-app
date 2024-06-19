@@ -10,15 +10,12 @@
 		120199502C1E34970072ECA4 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1201994F2C1E34970072ECA4 /* AppState.swift */; };
 		120199522C1E4EF20072ECA4 /* ARSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120199512C1E4EF20072ECA4 /* ARSessionManager.swift */; };
 		12269E372C19C5160062AE7D /* MuseumViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E362C19C5160062AE7D /* MuseumViewModel.swift */; };
-		12269E4D2C1BAC700062AE7D /* Attachments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E4C2C1BAC700062AE7D /* Attachments.swift */; };
 		12269E4F2C1BBA630062AE7D /* ActiveEntityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */; };
 		12269E552C1C87DB0062AE7D /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E542C1C87DB0062AE7D /* Items.swift */; };
 		12269E572C1C94EB0062AE7D /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E562C1C94EB0062AE7D /* InfoView.swift */; };
 		12269E592C1C958C0062AE7D /* InfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E582C1C958C0062AE7D /* InfoModel.swift */; };
-		12269E5B2C1C99C00062AE7D /* ShowInfoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12269E5A2C1C99C00062AE7D /* ShowInfoButton.swift */; };
-		12E973CB2C1CA9DE003D9D83 /* HideInfoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E973CA2C1CA9DE003D9D83 /* HideInfoButton.swift */; };
 		12E973CF2C1CAAC7003D9D83 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E973CE2C1CAAC7003D9D83 /* Colors.swift */; };
-		12E973D32C1CC070003D9D83 /* AttachmentPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E973D22C1CC070003D9D83 /* AttachmentPosition.swift */; };
+		12E973D32C1CC070003D9D83 /* InfoViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E973D22C1CC070003D9D83 /* InfoViewState.swift */; };
 		12F0AAF62C17919E00F95DB5 /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = 12F0AAF52C17919E00F95DB5 /* RealityKitContent */; };
 		12F0AAF82C17919E00F95DB5 /* MuseumApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F0AAF72C17919E00F95DB5 /* MuseumApp.swift */; };
 		12F0AAFA2C17919E00F95DB5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F0AAF92C17919E00F95DB5 /* ContentView.swift */; };
@@ -31,15 +28,12 @@
 		1201994F2C1E34970072ECA4 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		120199512C1E4EF20072ECA4 /* ARSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARSessionManager.swift; sourceTree = "<group>"; };
 		12269E362C19C5160062AE7D /* MuseumViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseumViewModel.swift; sourceTree = "<group>"; };
-		12269E4C2C1BAC700062AE7D /* Attachments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachments.swift; sourceTree = "<group>"; };
 		12269E4E2C1BBA630062AE7D /* ActiveEntityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveEntityModel.swift; sourceTree = "<group>"; };
 		12269E542C1C87DB0062AE7D /* Items.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Items.swift; sourceTree = "<group>"; };
 		12269E562C1C94EB0062AE7D /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		12269E582C1C958C0062AE7D /* InfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoModel.swift; sourceTree = "<group>"; };
-		12269E5A2C1C99C00062AE7D /* ShowInfoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowInfoButton.swift; sourceTree = "<group>"; };
-		12E973CA2C1CA9DE003D9D83 /* HideInfoButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HideInfoButton.swift; sourceTree = "<group>"; };
 		12E973CE2C1CAAC7003D9D83 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
-		12E973D22C1CC070003D9D83 /* AttachmentPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentPosition.swift; sourceTree = "<group>"; };
+		12E973D22C1CC070003D9D83 /* InfoViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewState.swift; sourceTree = "<group>"; };
 		12F0AAF02C17919E00F95DB5 /* MuseumApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuseumApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F0AAF42C17919E00F95DB5 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
 		12F0AAF72C17919E00F95DB5 /* MuseumApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseumApp.swift; sourceTree = "<group>"; };
@@ -93,9 +87,8 @@
 		12E973CD2C1CAA8F003D9D83 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
-				12269E4C2C1BAC700062AE7D /* Attachments.swift */,
 				12269E542C1C87DB0062AE7D /* Items.swift */,
-				12E973D22C1CC070003D9D83 /* AttachmentPosition.swift */,
+				12E973D22C1CC070003D9D83 /* InfoViewState.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -104,8 +97,6 @@
 			isa = PBXGroup;
 			children = (
 				12269E562C1C94EB0062AE7D /* InfoView.swift */,
-				12269E5A2C1C99C00062AE7D /* ShowInfoButton.swift */,
-				12E973CA2C1CA9DE003D9D83 /* HideInfoButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -249,21 +240,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				12269E4D2C1BAC700062AE7D /* Attachments.swift in Sources */,
 				12E973CF2C1CAAC7003D9D83 /* Colors.swift in Sources */,
 				120199522C1E4EF20072ECA4 /* ARSessionManager.swift in Sources */,
 				12269E372C19C5160062AE7D /* MuseumViewModel.swift in Sources */,
 				12269E552C1C87DB0062AE7D /* Items.swift in Sources */,
 				12F0AAFA2C17919E00F95DB5 /* ContentView.swift in Sources */,
-				12269E5B2C1C99C00062AE7D /* ShowInfoButton.swift in Sources */,
 				12269E4F2C1BBA630062AE7D /* ActiveEntityModel.swift in Sources */,
 				12F0AAF82C17919E00F95DB5 /* MuseumApp.swift in Sources */,
 				12269E572C1C94EB0062AE7D /* InfoView.swift in Sources */,
 				120199502C1E34970072ECA4 /* AppState.swift in Sources */,
-				12E973CB2C1CA9DE003D9D83 /* HideInfoButton.swift in Sources */,
 				12F0AAFC2C17919E00F95DB5 /* ImmersiveView.swift in Sources */,
 				12269E592C1C958C0062AE7D /* InfoModel.swift in Sources */,
-				12E973D32C1CC070003D9D83 /* AttachmentPosition.swift in Sources */,
+				12E973D32C1CC070003D9D83 /* InfoViewState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

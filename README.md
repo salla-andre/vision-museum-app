@@ -1,6 +1,10 @@
 # My Own Museum
 
-![App Screenshot](screenshot.png)
+![Simulator Screenshot](screenshot.png)
+*Running on Simulator*
+
+![Device Screenshot](screenshot2.png)
+*Running on Device*
 
 ## Description
 
@@ -27,8 +31,6 @@ By long-pressing the objects, users can drag and rotate them to create a unique 
 #### Components
 
 - **InfoView:** The view attached to the entity that displays information about the object.
-- **ShowInfoButton:** The button attached to the entity that allows the user to display the InfoView. When tapped, it will be replaced by the `HideInfoButton`.
-- **HideInfoButton:** The button attached to the entity that allows the user to hide the InfoView. When tapped, it will be replaced by the `ShowInfoButton`.
 
 #### Views
 
@@ -38,9 +40,8 @@ By long-pressing the objects, users can drag and rotate them to create a unique 
 
 #### Enums
 
-- **Attachments:** The attachments available for the objects in the app.
 - **Items:** The items (objects) the app displays.
-- **AttachmentPosition:** The position where the attachment will be shown relative to the object (left or right).
+- **InfoViewState:** The state of the Info View (showing or hide).
 
 #### Extensions
 
@@ -71,10 +72,11 @@ By long-pressing the objects, users can drag and rotate them to create a unique 
 - Additional info on attachments
 - Auto-hide Immersive View while the app is inactive
 - Easy and visual drag-and-rotate
+- Info Views always face the user
 
 ### Important Notes
 
-- The Persisted Positioning feature (aka World Anchors) is not supported on Simulator. All functionalities based on the ARKit framework don’t work on Simulator and will cause a crash if not properly isolated. To test this feature, please build and run the app on a physical device.
+- The Persisted Positioning (aka World Anchors) and the Always Facing View features are not supported on Simulator. All functionalities based on the ARKit framework don’t work on Simulator and will cause a crash if not properly isolated. To test this feature, please build and run the app on a physical device.
 
 ## Setup
 
@@ -89,6 +91,7 @@ To move/rotate the objects, long press the desired object until a transparent bo
 - Objects pushed by other objects while dragging won’t have their new position persisted.
 - The app doesn’t detect walls, so the objects can be dragged beyond walls and over objects like tables.
 - The Info View doesn’t have a physical body and may overlay other objects in the virtual space.
+- In some rare cases, the object may blink or momentarily disappear while moving it inside the glass box.
 
 ## Demo
 
