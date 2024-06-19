@@ -3,7 +3,7 @@
 ![Simulator Screenshot](screenshot.png)
 *Running on Simulator*
 
-![Device Screenshot](screenshot2.png)
+![Device Screenshot](screenshot2.PNG)
 *Running on Device*
 
 ## Description
